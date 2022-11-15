@@ -115,3 +115,8 @@
     text-align: center;
     color: #FFFFFF;
 }
+
+.btn:hover {
+    background-color: rgba(21, 12, 4, 0.6);
+
+}
