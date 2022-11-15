@@ -64,16 +64,31 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 @app.route('/scheduleRequest',methods=['POST'])
 def scheduleRequest():
-    if request.method == 'POST':
-        name = request.form['name']
-        date = request.form['date']
-        time = request.form['time']
-        pet = request.form['pet']
-        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
-        # mysql.connection.commit()
-        return redirect(url_for('index'))
+    # if request.method == 'POST':
+    #     pet = request.form['pet']
+    #     date = request.form['date']
+    #     droptime = request.form['dropOffTime']
+    #     picktime = request.form['pickUpTime']
+    #     # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    #     # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
+    #     # mysql.connection.commit()
+    #     return redirect(url_for('index'))
     return render_template('/components/schedule.html')
+
+
+    
+@app.route('/infoRequest',methods=['POST'])
+def infoRequest():
+    # if request.method == 'POST':
+    #     name = request.form['name']
+    #     date = request.form['date']
+    #     time = request.form['time']
+    #     pet = request.form['pet']
+    #     # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    #     # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
+    #     # mysql.connection.commit()
+    #     return redirect(url_for('index'))
+    return render_template('/components/info.html')
 
 
 
@@ -88,6 +103,10 @@ def home():
 @app.route('/schedule')
 def schedule():
     return render_template('/components/schedule.html')
+
+@app.route('/myInfo')
+def myInfo():
+    return render_template('/components/info.html')
 
 if __name__ == '__main__':
    app.run()
