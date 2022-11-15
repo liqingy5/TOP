@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/info.css') }}" type="text/css">
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="info">
+    <h1 class="info_title">My information</h1>
+    <div class="infoForm">
+        <form action="{{ url_for('infoRequest') }}" method="post">
+            <h1>Review/Change your contact information</h1>
+            <div class="formInput">
+                <label for="userName">Your name:</label>
+                <input class="input" type="text" id="userName" name="userName" value="James">
+            </div>
+            <div class="formInput">
+                <label for="phone">Phone:</label>
+                <input class="input" type="text" id="phone" name="phone" value="(412)123-4567">
+            </div>
+            <div class="formInput">
+                <label for="address">Address:</label>
+                <input class="input" type="text" id="address" name="address" value="Sennot Square">
+            </div>
+            <div class="infoButton">
+                <input class="btn" type="submit" value="Update">
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
