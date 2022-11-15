@@ -9,19 +9,19 @@
 <div class="info">
     <h1 class="info_title">My information</h1>
     <div class="infoForm">
-        <form action="{{ url_for('UserinfoUpdate') }}" method="post">
+        <form method="post">
             <h1>Review/Change your contact information</h1>
             <div class="formInput">
                 <label for="userName">Your name:</label>
-                <input class="input" type="text" id="userName" name="userName" value="James">
+                <input class="input" type="text" id="name" name="name" value="{{user.name}}">
             </div>
             <div class="formInput">
                 <label for="phone">Phone:</label>
-                <input class="input" type="text" id="phone" name="phone" value="(412)123-4567">
+                <input class="input" type="text" id="phone" name="phone" value="{{user.phone}}">
             </div>
             <div class="formInput">
                 <label for="address">Address:</label>
-                <input class="input" type="text" id="address" name="address" value="Sennot Square">
+                <input class="input" type="text" id="address" name="address" value="{{user.address}}">
             </div>
             <div class="infoButton">
                 <input class="btn" type="submit" value="Update">

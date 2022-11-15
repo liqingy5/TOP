@@ -3,7 +3,7 @@ from flask import url_for
 from markupsafe import escape
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager,UserMixin,login_required, logout_user, login_user
+from flask_login import LoginManager,UserMixin,login_required, logout_user, login_user,current_user
 
 
 import click
@@ -148,53 +148,6 @@ def scheduleRequest():
     return render_template('/components/schedule.html')
 
 
-    
-@app.route('/UserinfoUpdate',methods=['POST'])
-def UserinfoUpdate():
-    # if request.method == 'POST':
-    #     name = request.form['name']
-    #     date = request.form['date']
-    #     time = request.form['time']
-    #     pet = request.form['pet']
-    #     # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    #     # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
-    #     # mysql.connection.commit()
-    #     return redirect(url_for('index'))
-    return render_template('/components/info.html')
-
-# @app.route('/petInfoUpdate/<string:petName>',methods=['GET', 'POST'])
-# def petInfoUpdate():
-#     pet = Pet.query.get(petName)
-#     if request.method == 'POST':
-#         name = request.form['petName']
-#         breed= request.form['petBreed']
-#         age = request.form['petAge']
-#         weight = request.form['petWeight']
-#         activity_level= request.form['petActivity']
-#         food_preference= request.form['petFoodPreference']
-#         if not name or not breed or not age or not weight or not activity_level or not food_preference:
-#             flash('Invalid input.')
-#             return redirect(url_for('view', pet_name=petName))
-
-#         pet.name = name
-#         pet.breed = breed
-#         pet.age = age
-#         pet.weight = weight
-#         pet.activity_level = activity_level
-#         pet.food_preference = food_preference
-#         db.session.commit()
-#         flash('Pet info updated.')
-#         return redirect(url_for('petsList'))
-#     return render_template('/components/pet.html',pet=pet)
-
-
-
-
-# @app.route('/')
-# @app.route('/login')
-# def root():
-#     return render_template('/components/login.html')
-
 
 @app.route('/index')
 @login_required
@@ -211,17 +164,29 @@ def home():
 def schedule():
     return render_template('/components/schedule.html')
 
-@app.route('/myInfo')
+@app.route('/myInfo',methods=['GET','POST'])
 @login_required
 def myInfo():
-    return render_template('/components/info.html')
+    user = User.query.get(current_user.id)
+    if(request.method == 'POST'):
+        name = request.form['name']
+        phone = request.form['phone']
+        address = request.form['address']
+        if not name or not phone or not address:
+            flash('Invalid input.')
+            return redirect(url_for('myInfo'))
+        user.name = name
+        user.phone = phone
+        user.address = address
+        db.session.commit()
+        flash('Update success.')
+    return render_template('/components/info.html',user=user)
 
 
 @app.route('/petsList/pet/<pet_id>',methods=['GET','POST'])
 @login_required
 def pet(pet_id):
     pet = Pet.query.get(pet_id)
-    owner = User.query.get(pet.owner_id)
     
     if request.method =='POST':
         name = request.form['petName']
@@ -243,7 +208,7 @@ def pet(pet_id):
         db.session.commit()
         flash('Pet info Updated.')
         return redirect(url_for('petsList'))
-    return render_template('/components/pet.html',pet=pet,owner=owner)
+    return render_template('/components/pet.html',pet=pet,owner=current_user.name)
 
 # @app.route('/pet')
 # def pet():
@@ -252,7 +217,7 @@ def pet(pet_id):
 @app.route('/petsList')
 @login_required
 def petsList():
-    pets = Pet.query.all()
+    pets = User.query.get(current_user.id).pets
     return render_template('/components/petsList.html',pets=pets)
 
 if __name__ == '__main__':
