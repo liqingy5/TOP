@@ -107,27 +107,31 @@ def initdb(drop):
     db.create_all()
     click.echo('Initialized database.')  # 输出提示信息
 
-@app.route('/')
-@app.route('/login', methods =['GET','POST'])
+
+@app.route('/', methods =['GET','POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
         if not username or not password:
+            flash('Invalid input.')
             return redirect(url_for('login'))
+
         user = User.query.filter_by(username=username).first()
-        if username ==user.username and user.validate_password(password):
+        if user and username ==user.username and user.validate_password(password):
             login_user(user)
+            flash('Login success.')
             return redirect(url_for('index'))
         flash('Invalid username or password.')
         return redirect(url_for('login'))
     return render_template('/components/login.html')
 
 @app.route('/logout')
-@login_required  # 用于视图保护，后面会详细介绍
+@login_required  # 用于视图保护
 def logout():
     logout_user()  # 登出用户
+    flash('Goodbye.')
     return redirect(url_for('login'))  # 重定向回首页
 
 @app.route('/scheduleRequest',methods=['POST'])
@@ -184,24 +188,14 @@ def UserinfoUpdate():
 #     return render_template('/components/pet.html',pet=pet)
 
 
-    
-@app.route('/viewPet',methods=['GET'])
-def viewPet():
-    # if request.method == 'POST':
-    #     name = request.form['name']
-    #     date = request.form['date']
-    #     time = request.form['time']
-    #     pet = request.form['pet']
-    #     # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    #     # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
-    #     # mysql.connection.commit()
-    #     return redirect(url_for('index'))
-    return render_template('/components/petsList.html')
 
 
 # @app.route('/')
-# def index():
+# @app.route('/login')
+# def root():
 #     return render_template('/components/login.html')
+
+
 @app.route('/index')
 @login_required
 def index():
@@ -221,10 +215,8 @@ def schedule():
 @login_required
 def myInfo():
     return render_template('/components/info.html')
-    
-# pets=[{'Owner':'Aaron Wu','Pet':'Cat','Name':'Dobby','Breed':'Abyssinian','Age':'6 months','Weight':'7 lbs','Activity_level':'annoying','food_preference':'raw meat'},
-# {'Owner':'Aaron Wu','Pet':'Cat','Name':'Yoda','Breed':'Russian Blue','Age':'18 months','Weight':'10 lbs','Activity_level':'quiet','food_preference':'raw meat'}
-# ]
+
+
 @app.route('/petsList/pet/<pet_id>',methods=['GET','POST'])
 @login_required
 def pet(pet_id):
@@ -239,6 +231,7 @@ def pet(pet_id):
         activity_level= request.form['petActivity']
         food_preference= request.form['petFoodPreference']
         if not name or not breed or not age or not weight or not activity_level or not food_preference:
+            flash('Invalid input.')
             return redirect(url_for('pet', pet_id=pet_id))
 
         pet.name = name
@@ -248,6 +241,7 @@ def pet(pet_id):
         pet.activity_level = activity_level
         pet.food_preference = food_preference
         db.session.commit()
+        flash('Pet info Updated.')
         return redirect(url_for('petsList'))
     return render_template('/components/pet.html',pet=pet,owner=owner)
 
@@ -259,7 +253,6 @@ def pet(pet_id):
 @login_required
 def petsList():
     pets = Pet.query.all()
-    print(pets)
     return render_template('/components/petsList.html',pets=pets)
 
 if __name__ == '__main__':
