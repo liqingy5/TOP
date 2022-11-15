@@ -43,7 +43,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 # @app.route('/')
-# @app.route('/login', methods =['GET', 'POST'])
+# @app.route('/login', methods =['POST'])
 # def login():
 #     msg = ''
 #     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
@@ -62,9 +62,32 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #             msg = 'Incorrect username / password !'
 #     return render_template('/components/login.html')
 
+@app.route('/scheduleRequest',methods=['POST'])
+def scheduleRequest():
+    if request.method == 'POST':
+        name = request.form['name']
+        date = request.form['date']
+        time = request.form['time']
+        pet = request.form['pet']
+        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
+        # mysql.connection.commit()
+        return redirect(url_for('index'))
+    return render_template('/components/schedule.html')
+
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/home')
+def home():
+    return render_template('/components/home.html')
+
+@app.route('/schedule')
+def schedule():
+    return render_template('/components/schedule.html')
 
 if __name__ == '__main__':
    app.run()

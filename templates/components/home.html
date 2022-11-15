@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/home.css') }}" type="text/css">
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="home">
+    <h1 class="home_title"> Welcome {{name}}</h1>
+
+    <p class="home_content"><a href="{{ url_for('schedule') }}"><button class="scheduleBtn">
+                <h2>Schedule a session for pet</h2>
+                <p>
+                    Click here to schedule a drop-off time for your fluffy friends. Your pet will be taken care by
+                    senior citizens who are experienced and passionate about pets just like you.
+                </p>
+            </button></a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "index.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/schedule.css') }}" type="text/css">
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="schedule">
+    <h1 class="schedule_title"> Schedule a session for your pet</h1>
+    <div class="scheduleForm">
+        <form action="{{ url_for('scheduleRequest') }}" method="post">
+            <h1>Simply put in the information below, we will match senior citizens for your pet</h1>
+            <div>
+                <label for="pet">Select your pet:</label>
+                <select name="pet" id="pet">
+                    <option value="pet1" selected>Dobby</option>
+                    <option value="pet2">Pet 2</option>
+                    <option value="pet3">Pet 3</option>
+                </select>
+            </div>
+            <div>
+
+                <label for="date">Date:</label>
+                <input class="input" type="date" id="date" name="date">
+            </div>
+            <div>
+
+                <label for="time">Drop-off Time:</label>
+                <input class="input" type="time" id="time" name="time">
+            </div>
+            <div>
+
+                <label for="time">Pick-up Time:</label>
+                <input class="input" type="time" id="time" name="time">
+            </div>
+            <div class="scheduleButtons">
+                <p>I want my pet to be taken care of by: </p>
+                <input class="btn" type="submit" value="The most suitable senior citizen">
+                <input class="btn" type="submit" value="I' ll choose from the top-5 subitable senior citizens">
+
+                <input class="btn" type="submit" value="I'll choose from all available senior citizens">
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
