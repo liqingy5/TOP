@@ -7,7 +7,7 @@
 {% block content %}
 {{ super() }}
 <div class="home">
-    <h1 class="home_title"> Welcome {{name}}</h1>
+    <h1 class="home_title"> Welcome, {{current_user.name}} !</h1>
 
     <p class="home_content"><a href="{{ url_for('schedule') }}"><button class="scheduleBtn">
                 <h2>Schedule a session for pet</h2>
