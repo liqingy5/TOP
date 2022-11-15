@@ -1,20 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/index.css') }}" type="text/css">
 
-<head>
-    <meta charset="utf-8">
-    <title>TOP system</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+{% endblock %}
 
-</head>
-
-<body>
-    {% include "/components/header.html" %}
-    <div class="content">
-        {% include "/components/menu.html" %}
+{% block content %}
+{% include "/components/header.html" %}
+<div class="content">
+    {% include "/components/menu.html" %}
+    <div class="main">
     </div>
-
-
-</body>
-
-</html>
+</div>
+{% endblock %}
