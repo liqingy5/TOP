@@ -18,38 +18,52 @@
 
             <div class=" formInput">
                 <label for="petName">Pet's name:</label>
-                <input class="input" type="text" id="petName" name="petName" value="{{pet.name}}">
+                <input class="input" type="text" id="petName" name="petName"
+                    value="{% if pet %} {{pet.name}} {% endif %}" required>
+            </div>
+
+            <div class="formInput">
+                <label for="petType">Pet's Type:</label>
+                <input class="input" type="text" id="petType" name="petType"
+                    value="{% if pet %} {{pet.type}} {% endif %}" required>
             </div>
 
             <div class="formInput">
                 <label for="petBreed">Pet's Breed:</label>
-                <input class="input" type="text" id="petBreed" name="petBreed" value="{{pet.breed}}">
+                <input class="input" type="text" id="petBreed" name="petBreed"
+                    value="{% if pet %} {{pet.breed}} {% endif %}" required>
             </div>
 
             <div class="formInput">
                 <label for="petAge">Pet's Age:</label>
-                <input class="input" type="text" id="petAge" name="petAge" value="{{pet.age}}">
+                <input class="input" type="text" id="petAge" name="petAge" value="{% if pet %} {{pet.age}} {% endif %}"
+                    required>
             </div>
 
             <div class="formInput">
                 <label for="petWeight">Pet's Weight:</label>
-                <input class="input" type="text" id="petWeight" name="petWeight" value="{{pet.weight}}">
+                <input class="input" type="text" id="petWeight" name="petWeight"
+                    value="{% if pet %} {{pet.weight}} {% endif %}" required>
             </div>
 
             <div class="formInput">
                 <label for="petAcitivityLevel">Pet's Acativity Level:</label>
                 <select name="petActivity" id="petActivity">
-                    <option value="annoying" {% if pet.Activity_level=="annoying" %} selected {% endif %}>Annoying
+                    <option value="annoying" {% if not pet or (pet and pet.Activity_level=="annoying" ) %} selected {%
+                        endif %}>Annoying
                     </option>
-                    <option value="moderate" {% if pet.Activity_level=="moderate" %} selected {% endif %}>Moderate
+                    <option value="moderate" {% if pet and pet.Activity_level=="moderate" %} selected {% endif %}>
+                        Moderate
                     </option>
-                    <option value="quiet" {% if pet.Activity_level=="quiet" %} selected {% endif %}>Quiet</option>
+                    <option value="quiet" {% if pet and pet.Activity_level=="quiet" %} selected {% endif %}>Quiet
+                    </option>
                 </select>
             </div>
 
             <div class="formInput">
                 <label for="petFoodPreference">Pet's food preference:</label>
-                <input class="input" type="text" id="petFoodPreference" name="petFoodPreference" value="raw meat">
+                <input class="input" type="text" id="petFoodPreference" name="petFoodPreference"
+                    value="{% if pet %} {{pet.food_preference}} {% endif %}" required>
             </div>
 
             <div class="petButton">

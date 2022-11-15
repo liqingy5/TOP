@@ -72,3 +72,7 @@
     background-color: #f8f9fa;
 
 }
+
+.float-right {
+    float: right;
+}

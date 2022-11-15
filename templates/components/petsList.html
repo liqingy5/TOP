@@ -10,12 +10,16 @@
     <div class="petsListForm">
         <form method="GET">
             <h1>My Pet(s)</h1>
+            <div class="AddPetBtn">
+                <a href="{{url_for('newPet')}}">Add Pet</a>
+            </div>
             <p>{{ pets|length }} Pet(s)</p>
             <ul class="lists">
                 {% for pet in pets %}
                 <li>{{ pet.name }}
                     <span class="float-right">
                         <a class="petSelect" href="{{url_for('pet',pet_id=pet.id)}}">View</a>
+                        <a class="petSelect" href="{{url_for('deletePet',pet_id=pet.id)}}">Delete</a>
                     </span>
                 </li>
                 {% endfor %}

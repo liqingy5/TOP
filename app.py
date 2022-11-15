@@ -149,6 +149,8 @@ def scheduleRequest():
 
 
 
+
+
 @app.route('/index')
 @login_required
 def index():
@@ -183,6 +185,37 @@ def myInfo():
     return render_template('/components/info.html',user=user)
 
 
+@app.route('/petsList/delete/<int:pet_id>',methods=['GET','POST'])
+@login_required
+def deletePet(pet_id):
+    pet = Pet.query.get(pet_id)
+    db.session.delete(pet)
+    db.session.commit()
+    flash('Delete success.')
+    return redirect(url_for('petsList'))
+
+
+@app.route('/petsList/addPet',methods=['GET','POST'])
+@login_required
+def newPet():
+    if(request.method == 'POST'):
+        name = request.form['petName']
+        type = request.form['petType']
+        breed = request.form['petBreed']
+        age = request.form['petAge']
+        weight = request.form['petWeight']
+        activity_level = request.form['petActivity']
+        food_preference = request.form['petFoodPreference']
+        if not name or not type or not breed or not age or not weight or not activity_level or not food_preference:
+            flash('Invalid input.')
+            return redirect(url_for('newPet'))
+        pet = Pet(name=name,type=type,breed=breed,age=age,weight=weight,activity_level=activity_level,food_preference=food_preference,user=current_user)
+        db.session.add(pet)
+        db.session.commit()
+        flash('Add success.')
+        return redirect(url_for('petsList'))
+    return render_template('/components/pet.html', owner=current_user.name)
+
 @app.route('/petsList/pet/<pet_id>',methods=['GET','POST'])
 @login_required
 def pet(pet_id):
@@ -190,6 +223,7 @@ def pet(pet_id):
     
     if request.method =='POST':
         name = request.form['petName']
+        type = request.form['petType']
         breed= request.form['petBreed']
         age = request.form['petAge']
         weight = request.form['petWeight']
