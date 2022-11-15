@@ -1,0 +1,11 @@
+body,
+html {
+    margin: auto;
+    height: 100%;
+    background-image: url('/static/images/chris-abney-mAsKA0jFfeQ-unsplash.jpg');
+    /* Full height */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
