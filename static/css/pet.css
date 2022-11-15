@@ -1,4 +1,4 @@
-.schedule {
+.pet {
     float: left;
     text-align: center;
     margin: auto;
@@ -7,7 +7,7 @@
     margin-top: 5em;
 }
 
-.schedule_title {
+.pet_title {
 
     font-family: 'Kaisei Decol';
     font-style: normal;
@@ -19,8 +19,8 @@
     color: white;
 }
 
-.scheduleForm {
-    width: 508px;
+.petForm {
+    width: 700px;
     left: 466px;
     top: 230px;
 
@@ -32,14 +32,13 @@
     border-radius: 15px;
 }
 
-.scheduleForm h1 {
+.petForm h1 {
     padding: 2em;
     font-family: 'Kaisei Decol';
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
     line-height: 29px;
-    display: flex;
     align-items: center;
     text-align: center;
 
@@ -49,14 +48,14 @@
     color: #000000;
 }
 
-.scheduleForm div {
+.petForm .formInput {
     margin: 0;
     padding: 0;
     margin-bottom: 10px;
     text-align: left
 }
 
-.scheduleForm label {
+.petForm label {
     text-align: left;
     margin-left: 3em;
 
@@ -69,7 +68,7 @@
 
 }
 
-.scheduleForm select,
+.formInput select,
 .input {
     float: right;
     margin-right: 3em;
@@ -84,25 +83,15 @@
 
 }
 
-.scheduleButtons p {
-    text-align: left;
-    margin-left: 3em;
-
-    font-family: 'Kaisei Decol';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 29px;
-    color: #000000;
+.petButton {
+    text-align: center;
 }
 
 .btn {
-
-
     background: rgba(174, 110, 52, 0.78);
     border-radius: 11px;
 
-    margin-left: 3em;
+    margin-top: 3em;
     margin-bottom: 1em;
 
     font-family: 'Kaisei Decol';
@@ -111,7 +100,5 @@
     font-size: 20px;
     line-height: 29px;
     /* identical to box height */
-
-    text-align: center;
     color: #FFFFFF;
 }
