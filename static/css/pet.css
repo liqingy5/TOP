@@ -68,6 +68,20 @@
 
 }
 
+.owner {
+    display: inline-block;
+    margin-left: 11em;
+
+
+
+    font-family: 'Kaisei Decol';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 29px;
+    color: #000000;
+}
+
 .formInput select,
 .input {
     float: right;

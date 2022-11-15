@@ -9,36 +9,36 @@
 <div class="pet">
     <h1 class="pet_title">My pet information</h1>
     <div class="petForm">
-        <form action="{{ url_for('petInfoUpdate') }}" method="post">
+        <form method="post">
             <h1>Review/Change your pet information</h1>
             <div class="formInput">
                 <label for="userName">Owner's name:</label>
-                <input class="input" type="text" id="userName" name="userName" value="{{pet.Owner}}">
+                <p class="owner">{{owner.name}}</p>
             </div>
 
             <div class=" formInput">
                 <label for="petName">Pet's name:</label>
-                <input class="input" type="text" id="petName" name="petName" value="{{pet.Name}}">
+                <input class="input" type="text" id="petName" name="petName" value="{{pet.name}}">
             </div>
 
             <div class="formInput">
                 <label for="petBreed">Pet's Breed:</label>
-                <input class="input" type="text" id="petBreed" name="petBreed" value="{{pet.Breed}}">
+                <input class="input" type="text" id="petBreed" name="petBreed" value="{{pet.breed}}">
             </div>
 
             <div class="formInput">
                 <label for="petAge">Pet's Age:</label>
-                <input class="input" type="text" id="petAge" name="petAge" value="{{pet.Age}}">
+                <input class="input" type="text" id="petAge" name="petAge" value="{{pet.age}}">
             </div>
 
             <div class="formInput">
                 <label for="petWeight">Pet's Weight:</label>
-                <input class="input" type="text" id="petWeight" name="petWeight" value="{{pet.Weight}}">
+                <input class="input" type="text" id="petWeight" name="petWeight" value="{{pet.weight}}">
             </div>
 
             <div class="formInput">
                 <label for="petAcitivityLevel">Pet's Acativity Level:</label>
-                <select name="pet" id="pet">
+                <select name="petActivity" id="petActivity">
                     <option value="annoying" {% if pet.Activity_level=="annoying" %} selected {% endif %}>Annoying
                     </option>
                     <option value="moderate" {% if pet.Activity_level=="moderate" %} selected {% endif %}>Moderate

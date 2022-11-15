@@ -13,9 +13,9 @@
             <p>{{ pets|length }} Pet(s)</p>
             <ul class="lists">
                 {% for pet in pets %}
-                <li>{{ pet.Name }}
+                <li>{{ pet.name }}
                     <span class="float-right">
-                        <a class="petSelect" href="{{url_for('view',pet_name=pet.Name)}}">View</a>
+                        <a class="petSelect" href="{{url_for('pet',pet_id=pet.id)}}">View</a>
                     </span>
                 </li>
                 {% endfor %}
