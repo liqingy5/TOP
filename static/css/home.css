@@ -28,3 +28,7 @@
     background: rgba(140, 123, 96, 0.8);
     border-radius: 15px;
 }
+
+.scheduleBtn:hover {
+    background: rgba(174, 110, 52, 0.6);
+}
