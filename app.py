@@ -229,11 +229,12 @@ def pet(pet_id):
         weight = request.form['petWeight']
         activity_level= request.form['petActivity']
         food_preference= request.form['petFoodPreference']
-        if not name or not breed or not age or not weight or not activity_level or not food_preference:
+        if not name or not type or not breed or not age or not weight or not activity_level or not food_preference:
             flash('Invalid input.')
             return redirect(url_for('pet', pet_id=pet_id))
 
         pet.name = name
+        pet.type = type
         pet.breed = breed
         pet.age = age
         pet.weight = weight

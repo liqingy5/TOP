@@ -13,15 +13,15 @@
             <h1>Review/Change your contact information</h1>
             <div class="formInput">
                 <label for="userName">Your name:</label>
-                <input class="input" type="text" id="name" name="name" value="{{user.name}}">
+                <input class="input" type="text" id="name" name="name" value="{{user.name.strip()}}">
             </div>
             <div class="formInput">
                 <label for="phone">Phone:</label>
-                <input class="input" type="text" id="phone" name="phone" value="{{user.phone}}">
+                <input class="input" type="text" id="phone" name="phone" value="{{user.phone.strip()}}">
             </div>
             <div class="formInput">
                 <label for="address">Address:</label>
-                <input class="input" type="text" id="address" name="address" value="{{user.address}}">
+                <input class="input" type="text" id="address" name="address" value="{{user.address.strip()}}">
             </div>
             <div class="infoButton">
                 <input class="btn" type="submit" value="Update">
