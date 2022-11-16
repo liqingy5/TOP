@@ -134,18 +134,45 @@ def logout():
     flash('Goodbye.')
     return redirect(url_for('login'))  # 重定向回首页
 
-@app.route('/scheduleRequest',methods=['POST'])
+@app.route('/scheduleRequest',methods=['GET', 'POST'])
 def scheduleRequest():
-    # if request.method == 'POST':
-    #     pet = request.form['pet']
-    #     date = request.form['date']
-    #     droptime = request.form['dropOffTime']
-    #     picktime = request.form['pickUpTime']
-    #     # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    #     # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
-    #     # mysql.connection.commit()
-    #     return redirect(url_for('index'))
+    if request.method == 'POST':
+        pet = request.form['pet']
+        date = request.form['date']
+        droptime = request.form['dropOffTime']
+        picktime = request.form['pickUpTime']
+        print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (pet, date, droptime, picktime))
+        print(request.form['submitBtn'])
+        if request.form['submitBtn'] == "The most suitable senior citizen":
+            print("Pet owner chooses to match the most suitable senior")
+            return redirect('AI_schedule')
+        elif request.form['submitBtn'] == "I'll choose from the top-5 subitable senior citizens":
+            print("Pet owner chooses to select from the top 5 seniors")
+            return redirect('hybrid_schedule')
+        else:
+            print("Pet owner chooses to manual select senior for pet")
+            return redirect('manual_schedule')
+        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
+        # mysql.connection.commit()
+        return redirect('scheduleRequest')
     return render_template('/components/schedule.html')
+
+@app.route('/AI_schedule')
+def AI_schedule():
+    return render_template('/components/AI_schedule.html')
+
+@app.route('/hybrid_schedule')
+def hybrid_schedule():
+    return render_template('/components/hybrid_schedule.html')
+
+@app.route('/manual_schedule')
+def manual_schedule():
+    return render_template('/components/manual_schedule.html')
+
+@app.route('/confirm')
+def confirm():
+    return render_template('/components/confirm.html')
 
 
 

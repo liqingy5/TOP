@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/seniorList.css') }}" type="text/css">
+<link rel="script" href="{{ url_for('static', filename='/js/seniorList.js') }}" type="text/css">
+<script src="{{ url_for('static', filename='js/seniorList.js') }}">
+    alert("This alert box was called with the onload event");
+</script>
+
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="senior_list">
+    <h1 class="senior_list_title">Your pet's session is scheduled!</h1>
+</div>
+{% endblock %}
