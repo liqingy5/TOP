@@ -4,7 +4,7 @@ from markupsafe import escape
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, logout_user, login_user, current_user
-
+from datetime import datetime, timedelta
 
 import click
 
@@ -65,12 +65,13 @@ class Senior(db.Model):
     age = db.Column(db.Integer)
     fav_type = db.Column(db.String(20))
     fav_activity = db.Column(db.Integer)
+    time = db.Column(db.PickleType)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime)
+    weekday = db.Column(db.Integer)
     dropOff = db.Column(db.DateTime)
     pickUp = db.Column(db.DateTime)
     pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'))
@@ -99,8 +100,15 @@ def forge():
                activity_level=1, food_preference='raw meat', user=user)
     pet2 = Pet(name='Yoda', type='Cat', breed='Russian Blue', age=18, weight=10,
                activity_level=3, food_preference='raw meat', user=user)
-    senior1 = Senior(age=50, fav_type="1,2,4,", fav_activity=1, user=user1)
-    senior2 = Senior(age=66, fav_type="4", fav_activity=3, user=user2)
+    time1 = {1: [datetime.now().time(), (datetime.now() +
+                                         timedelta(hours=5)).time()]}
+    time2 = {2: [(datetime.now() -
+                  timedelta(hours=1)).time(), (datetime.now() +
+                                               timedelta(hours=3)).time()]}
+    senior1 = Senior(age=50, fav_type="1,2,4,",
+                     fav_activity=1, time=time1, user=user1)
+    senior2 = Senior(age=66, fav_type="4", fav_activity=3,
+                     time=time2, user=user2)
     db.session.add(user)
     db.session.add(pet1)
     db.session.add(pet2)
