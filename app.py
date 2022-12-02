@@ -280,6 +280,31 @@ def myInfo():
     return render_template('/components/info.html', user=user)
 
 
+@app.route('/seniorPref', methods=['GET', 'POST'])
+@login_required
+def seniorPref():
+    user = User.query.get(current_user.id)
+    age = db.Column(db.Integer)
+    fav_type = db.Column(db.String(20))
+    fav_activity = db.Column(db.Integer)
+    if(request.method == 'POST'):
+        age = request.form['seniorAge']
+        fav_type = request.form.getlist('fav_type')
+        fav_activity = request.form['fav_activity']
+        weekdays = request.form.getlist('weekdaysSelect')
+        time_from = request.form['from']
+        time_to = request.form['to']
+        if not age or not fav_type or not fav_activity or not weekdays or not time_from or not time_to:
+            flash('Invalid input.')
+            return redirect(url_for('seniorPref'))
+        # user.name = name
+        # user.phone = phone
+        # user.address = address
+        # db.session.commit()
+        flash('Pref Update success.')
+    return render_template('/components/seniorPrefer.html', user=user)
+
+
 @app.route('/petsList/delete/<int:pet_id>', methods=['GET', 'POST'])
 @login_required
 def deletePet(pet_id):
