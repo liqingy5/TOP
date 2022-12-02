@@ -35,28 +35,28 @@
             </div>
 
             <div class="formInput">
-                <label for="petAge">Pet's Age:</label>
-                <input class="input" type="text" id="petAge" name="petAge"
-                    value="{% if pet %} {{pet.age.strip()}} {% endif %}" required>
+                <label for="petAge">Pet's Age (In months):</label>
+                <input class="input" type="number" id="petAge" name="petAge"
+                    value={% if pet %} {{pet.age}} {% endif %} required>
             </div>
 
             <div class="formInput">
-                <label for="petWeight">Pet's Weight:</label>
-                <input class="input" type="text" id="petWeight" name="petWeight"
-                    value="{% if pet %} {{pet.weight.strip()}} {% endif %}" required>
+                <label for="petWeight">Pet's Weight (In lbs):</label>
+                <input class="input" type="number" id="petWeight" name="petWeight"
+                    value={% if pet %} {{pet.weight}} {% endif %} required>
             </div>
 
             <div class="formInput">
                 <label for="petAcitivityLevel">Pet's Acativity Level:</label>
                 <select name="petActivity" id="petActivity">
-                    <option value="annoying" {% if not pet or (pet and pet.activity_level.strip()=="annoying" ) %}
+                    <option value=1 {% if not pet or (pet and pet.activity_level==1 ) %}
                         selected {% endif %}>Annoying
                     </option>
-                    <option value="moderate" {% if pet and pet.activity_level.strip()=="moderate" %} selected {% endif
+                    <option value=2 {% if pet and pet.activity_level==2 %} selected {% endif
                         %}>
                         Moderate
                     </option>
-                    <option value="quiet" {% if pet and pet.activity_level.strip()=="quiet" %} selected {% endif %}>
+                    <option value=3 {% if pet and pet.activity_level==3 %} selected {% endif %}>
                         Quiet
                     </option>
                 </select>
