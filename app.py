@@ -70,7 +70,7 @@ class Senior(db.Model):
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(20))
+    date = db.Column(db.DateTime)
     dropOff = db.Column(db.DateTime)
     pickUp = db.Column(db.DateTime)
     pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'))
