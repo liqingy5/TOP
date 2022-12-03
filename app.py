@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, logout_user, login_user, current_user
 from datetime import datetime, timedelta
 
+
 import click
 
 
@@ -102,10 +103,13 @@ def forge():
                activity_level=1, food_preference='raw meat', user=user)
     pet2 = Pet(name='Yoda', type='Cat', breed='Russian Blue', age=18, weight=10,
                activity_level=3, food_preference='raw meat', user=user)
-    weeks1 = [1,2,3]
+    
+    today = datetime.today().strftime('%Y-%m-%d')
+    today = datetime.strptime(today, '%Y-%m-%d')
+    weeks1 = [today+timedelta(days=i) for i in range(5, 8)]
     time_from_1 = datetime.strptime('10:00', '%H:%M')
     time_to_1 = datetime.strptime('12:00', '%H:%M')
-    weeks2= [4,5,6]
+    weeks2 = [today+timedelta(days=i) for i in range(3, 6)]
     time_from_2 = datetime.strptime('13:00', '%H:%M')
     time_to_2 = datetime.strptime('15:00', '%H:%M')
     
@@ -284,17 +288,22 @@ def myInfo():
 @login_required
 def seniorPref():
     senior = User.query.get(current_user.id).senior
-    print(senior)
+    today = datetime.today().date()
+    choosebleDate = [today + timedelta(days=i) for i in range(1,8)]
+    seniorAvaliability=[]
     if not senior:
         senior = Senior()
         senior.user_id = current_user.id
+    else:
+        seniorAvaliability = [x.date() for x in senior.weekday]
+
     if(request.method == 'POST'):
         age = request.form['seniorAge']
         fav_type = request.form.getlist('typeSelect')
         fav_type = [eval(i) for i in fav_type]
         fav_activity = request.form['petActivity']
         weekday = request.form.getlist('weekdaysSelect')
-        weekday = [eval(i) for i in weekday]
+        weekday = [datetime.strptime(i,'%Y-%m-%d') for i in weekday]
         time_from = request.form['from']
         time_from = datetime.strptime(time_from, '%H:%M')
         time_to = request.form['to']
@@ -313,8 +322,8 @@ def seniorPref():
         db.session.add(senior)
         db.session.commit()
         flash('Preference Update success.')
-    print(senior.time_from.strftime('%H:%M'))
-    return render_template('/components/seniorPrefer.html', senior=senior,time_from=senior.time_from.strftime('%H:%M'),time_to=senior.time_to.strftime('%H:%M'))
+        seniorAvaliability = [x.date() for x in senior.weekday]
+    return render_template('/components/seniorPrefer.html', senior=senior,choosebleDate = choosebleDate,seniorAvaliability = seniorAvaliability,time_from=senior.time_from.strftime('%H:%M'),time_to=senior.time_to.strftime('%H:%M'))
 
 
 @app.route('/petsList/delete/<int:pet_id>', methods=['GET', 'POST'])

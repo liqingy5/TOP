@@ -43,15 +43,12 @@
             </div>
             <h2>Availability</h2>
             <div class="multipleSelect">
-                <label for="weekdaysSelect">weekdays</label>
+                <label for="weekdaysSelect">Date (in one week)</label>
                 <select id="weekdaysSelect" name="weekdaysSelect" multiple required>
-                    <option value=1 {% if senior and (1 in senior.weekday)%} selected {% endif %}>Monday</option>
-                    <option value=2 {% if senior and (2 in senior.weekday)%} selected {% endif %}>Tuesday</option>
-                    <option value=3 {% if senior and (3 in senior.weekday)%} selected {% endif %}>Wednesday</option>
-                    <option value=4 {% if senior and (4 in senior.weekday) %} selected {% endif %}>Thursday</option>
-                    <option value=5 {% if senior and (5 in senior.weekday)%} selected {% endif %}>Friday</option>
-                    <option value=6 {% if senior and (6 in senior.weekday)%} selected {% endif %}>Saturday</option>
-                    <option value=7 {% if senior and (7 in senior.weekday)%} selected {% endif %}>Sunday</option>
+                    {% for date in choosebleDate %}
+                    <option value={{date}} {% if senior and (date in seniorAvaliability) %} selected {% endif %}>
+                        {{date}}
+                        {% endfor %}
                 </select>
             </div>
             <div class="formInput">
