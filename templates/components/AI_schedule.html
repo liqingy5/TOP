@@ -16,15 +16,22 @@
 
     <div class="cards">
 
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/brad-pitt.jpg') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Brad Pitt</p>
-            <p>Gender: Male</p>
-            <p>Age: 59</p>
-            <p>Pet Preference: Dog, Cat, Bird</p>
+        {% for i in range(seniors|length) %}
+            <div class="card">
+                <img src="{{ url_for('static', filename='/images/brad-pitt.jpg') }}"/>
+                <input type="checkbox"/>
+                <p>Name: {{ users[i].name }}</p>
+                <p>Gender: Male</p>
+                <p>Age:{{ seniors[i].age }}</p>
+                <p>Pet Preference:
+                    {% if 1 in seniors[i].fav_type %} Big Dog, {% endif %}
+                    {% if 2 in seniors[i].fav_type %} Medium Dog, {% endif %}
+                    {% if 3 in seniors[i].fav_type %} Small Dog, {% endif %}
+                    {% if 4 in seniors[i].fav_type %} Cat, {% endif %}
+                </p>
 
-        </div>
+            </div>
+        {% endfor %}
 
         <div class="btn">
             <a href="{{ url_for('confirm') }}">Confirm</a>

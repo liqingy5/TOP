@@ -159,74 +159,31 @@ def logout():
     flash('Goodbye.')
     return redirect(url_for('login'))  # 重定向回首页
 
+def generate_senior_list(seniors, pet, droptime, picktime):
 
-@app.route('/scheduleRequest', methods=['GET', 'POST'])
-def scheduleRequest():
-    if request.method == 'POST':
-        pet = request.form['pet']
-        date = request.form['date']
-        droptime = request.form['dropOffTime']
-        picktime = request.form['pickUpTime']
-        print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
-              (pet, date, droptime, picktime))
-        print(request.form['submitBtn'])
-        print()
-        print(pet)
-        print(date)
-        print(droptime)
-        print(picktime)
-        print(type(pet))
-        print(type(date))
-        print(type(droptime))
-        print(type(picktime))
-        print()
+    return seniors
 
-        print(datetime.strptime('12:00', '%H:%M'))
-        if pet=='' or date=='' or droptime=='' or picktime=='':
-            flash('Invalid date or time.')
-            return redirect('scheduleRequest')
+def get_all_users(seniors):
+    ret = []
+    for senior in seniors:
+        ret.append(User.query.get(senior.user_id))
 
-        if picktime <= droptime:
-            flash('Pick-up time cannot be earlier than drop-off time')
-            return redirect('scheduleRequest')
-
-        droptime = datetime.strptime(date + " " + droptime, "%Y-%m-%d %H:%M")
-        picktime = datetime.strptime(date + " " + picktime, "%Y-%m-%d %H:%M")
-
-        if droptime < datetime.now():
-            flash('Drop-off time has to be in the future')
-            return redirect('scheduleRequest')
-
-        if picktime < datetime.now():
-            flash('Pick-up time has to be in the future')
-            return redirect('scheduleRequest')
-
-        if request.form['submitBtn'] == "The most suitable senior citizen":
-            print("Pet owner chooses to match the most suitable senior")
-            return redirect(url_for('AI_schedule', pet=pet, droptime=droptime, picktime=picktime))
-        elif request.form['submitBtn'] == "I'll choose from the top-5 subitable senior citizens":
-            print("Pet owner chooses to select from the top 5 seniors")
-            return redirect('hybrid_schedule')
-        else:
-            print("Pet owner chooses to manual select senior for pet")
-            return redirect(url_for('manual_schedule'))
-        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
-        # mysql.connection.commit()
-
-    return render_template('/components/schedule.html')
-
+    return ret
 
 @app.route('/AI_schedule')
 def AI_schedule():
-    pet = request.args['pet']
+    pet_id = request.args['pet_id']
+    pet = Pet.query.get(pet_id)
     droptime = request.args['droptime']
-    picktime=request.args['picktime']
-    print(pet)
-    print(droptime)
-    print(picktime)
-    return render_template('/components/AI_schedule.html')
-
+    picktime = request.args['picktime']
+    print(pet_id)
+    print(pet.name.strip())
+    print(pet.type.strip())
+    seniors = Senior.query.all()
+    seniors_aval = generate_senior_list(seniors, pet, droptime, picktime)
+    users = get_all_users(seniors_aval)
+    print(users)
+    return render_template('/components/AI_schedule.html', seniors=seniors_aval, users=users)
 
 @app.route('/hybrid_schedule')
 def hybrid_schedule():
@@ -255,10 +212,53 @@ def home():
     return render_template('/components/home.html')
 
 
-@app.route('/schedule')
+@app.route('/schedule', methods=['GET', 'POST'])
 @login_required
 def schedule():
-    return render_template('/components/schedule.html')
+    if request.method == 'POST':
+        pet_id = int(request.form['pet'])
+        date = request.form['date']
+        droptime = request.form['dropOffTime']
+        picktime = request.form['pickUpTime']
+        print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
+              (pet, date, droptime, picktime))
+        print(request.form['submitBtn'])
+
+        print(datetime.strptime('12:00', '%H:%M'))
+        if pet_id == '' or date == '' or droptime == '' or picktime == '':
+            flash('Invalid date or time.')
+            return redirect('schedule')
+
+        if picktime <= droptime:
+            flash('Pick-up time cannot be earlier than drop-off time')
+            return redirect('schedule')
+
+        droptime = datetime.strptime(date + " " + droptime, "%Y-%m-%d %H:%M")
+        picktime = datetime.strptime(date + " " + picktime, "%Y-%m-%d %H:%M")
+
+        if droptime < datetime.now():
+            flash('Drop-off time has to be in the future')
+            return redirect('schedule')
+
+        if picktime < datetime.now():
+            flash('Pick-up time has to be in the future')
+            return redirect('schedule')
+
+        if request.form['submitBtn'] == "The most suitable senior citizen":
+            print("Pet owner chooses to match the most suitable senior")
+            return redirect(url_for('AI_schedule', pet_id=pet_id, droptime=droptime, picktime=picktime))
+        elif request.form['submitBtn'] == "I'll choose from the top-5 subitable senior citizens":
+            print("Pet owner chooses to select from the top 5 seniors")
+            return redirect('hybrid_schedule')
+        else:
+            print("Pet owner chooses to manual select senior for pet")
+            return redirect(url_for('manual_schedule'))
+        # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
+        # mysql.connection.commit()
+    pets = User.query.get(current_user.id).pets
+    return render_template('/components/schedule.html', pets=pets)
+
 
 
 @app.route('/myInfo', methods=['GET', 'POST'])

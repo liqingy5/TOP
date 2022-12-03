@@ -16,85 +16,22 @@
 
     <div class="cards">
 
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/brad-pitt.jpg') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Brad Pitt</p>
-            <p>Gender: Male</p>
-            <p>Age: 59</p>
-            <p>Pet Preference: Dog, Cat, Bird</p>
+        {% for i in range(seniors|length) %}
+            <div class="card">
+                <img src="{{ url_for('static', filename='/images/brad-pitt.jpg') }}"/>
+                <input type="checkbox"/>
+                <p>Name: {{ users[i].name }}</p>
+                <p>Gender: Male</p>
+                <p>Age:{{ seniors[i].age }}</p>
+                <p>Pet Preference:
+                    {% if 1 in seniors[i].fav_type %} Big Dog, {% endif %}
+                    {% if 2 in seniors[i].fav_type %} Medium Dog, {% endif %}
+                    {% if 3 in seniors[i].fav_type %} Small Dog, {% endif %}
+                    {% if 4 in seniors[i].fav_type %} Cat, {% endif %}
+                </p>
 
-        </div>
-
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/elon-musk.png') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Elon Musk</p>
-            <p>Gender: Male</p>
-            <p>Age: 54</p>
-            <p>Pet Preference: Dog</p>
-
-        </div>
-
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/profile_icon.png') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Senior 3</p>
-            <p>Gender: Female</p>
-            <p>Age: 63</p>
-            <p>Pet Preference: Dog, Cat, Bird</p>
-
-        </div>
-
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/profile_icon.png') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Senior 4</p>
-            <p>Gender: Female</p>
-            <p>Age: 59</p>
-            <p>Pet Preference: Cat, Bird</p>
-
-        </div>
-
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/profile_icon.png') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Senior 5</p>
-            <p>Gender: Maleale</p>
-            <p>Age: 52</p>
-            <p>Pet Preference: Dog, Bird</p>
-
-        </div>
-
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/profile_icon.png') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Senior 6</p>
-            <p>Gender: Female</p>
-            <p>Age: 63</p>
-            <p>Pet Preference: Dog, Cat, Bird</p>
-
-        </div>
-
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/profile_icon.png') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Senior 7</p>
-            <p>Gender: Female</p>
-            <p>Age: 59</p>
-            <p>Pet Preference: Cat, Bird</p>
-
-        </div>
-
-        <div class="card">
-            <img src="{{ url_for('static', filename='/images/profile_icon.png') }}"/>
-            <input type="checkbox"/>
-            <p>Name: Senior 8</p>
-            <p>Gender: Maleale</p>
-            <p>Age: 52</p>
-            <p>Pet Preference: Dog, Bird</p>
-
-        </div>
+            </div>
+        {% endfor %}
         
         <div class="btn">
             <a href="{{ url_for('confirm') }}">Confirm</a>
