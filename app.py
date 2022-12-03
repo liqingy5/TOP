@@ -170,24 +170,61 @@ def scheduleRequest():
         print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
               (pet, date, droptime, picktime))
         print(request.form['submitBtn'])
+        print()
+        print(pet)
+        print(date)
+        print(droptime)
+        print(picktime)
+        print(type(pet))
+        print(type(date))
+        print(type(droptime))
+        print(type(picktime))
+        print()
+
+        print(datetime.strptime('12:00', '%H:%M'))
+        if pet=='' or date=='' or droptime=='' or picktime=='':
+            flash('Invalid date or time.')
+            return redirect('scheduleRequest')
+
+        if picktime <= droptime:
+            flash('Pick-up time cannot be earlier than drop-off time')
+            return redirect('scheduleRequest')
+
+        droptime = datetime.strptime(date + " " + droptime, "%Y-%m-%d %H:%M")
+        picktime = datetime.strptime(date + " " + picktime, "%Y-%m-%d %H:%M")
+
+        if droptime < datetime.now():
+            flash('Drop-off time has to be in the future')
+            return redirect('scheduleRequest')
+
+        if picktime < datetime.now():
+            flash('Pick-up time has to be in the future')
+            return redirect('scheduleRequest')
+
         if request.form['submitBtn'] == "The most suitable senior citizen":
             print("Pet owner chooses to match the most suitable senior")
-            return redirect('AI_schedule')
+            return redirect(url_for('AI_schedule', pet=pet, droptime=droptime, picktime=picktime))
         elif request.form['submitBtn'] == "I'll choose from the top-5 subitable senior citizens":
             print("Pet owner chooses to select from the top 5 seniors")
             return redirect('hybrid_schedule')
         else:
             print("Pet owner chooses to manual select senior for pet")
-            return redirect('manual_schedule')
+            return redirect(url_for('manual_schedule'))
         # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
         # mysql.connection.commit()
-        return redirect('scheduleRequest')
+
     return render_template('/components/schedule.html')
 
 
 @app.route('/AI_schedule')
 def AI_schedule():
+    pet = request.args['pet']
+    droptime = request.args['droptime']
+    picktime=request.args['picktime']
+    print(pet)
+    print(droptime)
+    print(picktime)
     return render_template('/components/AI_schedule.html')
 
 
@@ -319,3 +356,4 @@ def petsList():
 
 if __name__ == '__main__':
     app.run()
+
