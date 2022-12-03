@@ -63,9 +63,9 @@ class Pet(db.Model):
 class Senior(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     age = db.Column(db.Integer)
-    fav_type = db.Column(db.String(20))
+    fav_type = db.Column(db.PickleType)
     fav_activity = db.Column(db.Integer)
-    week=db.Column(db.PickleType)
+    weekday=db.Column(db.PickleType)
     time_from = db.Column(db.DateTime)
     time_to = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -73,7 +73,7 @@ class Senior(db.Model):
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    weekday = db.Column(db.Integer)
+    weekday = db.Column(db.PickleType)
     dropOff = db.Column(db.DateTime)
     pickUp = db.Column(db.DateTime)
     pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'))
@@ -109,9 +109,9 @@ def forge():
     time_from_2 = datetime.strptime('13:00', '%H:%M')
     time_to_2 = datetime.strptime('15:00', '%H:%M')
     
-    senior1 = Senior(age=50, fav_type="1,2,4,",
-                     fav_activity=1, week=weeks1,time_from=time_from_1,time_to=time_to_1, user=user1)
-    senior2 = Senior(age=66, fav_type="4", fav_activity=3,week=weeks2,
+    senior1 = Senior(age=50, fav_type=[1,2,4],
+                     fav_activity=1, weekday=weeks1,time_from=time_from_1,time_to=time_to_1, user=user1)
+    senior2 = Senior(age=66, fav_type=[4], fav_activity=3,weekday=weeks2,
                      time_from=time_from_2,time_to=time_to_2, user=user2)
     db.session.add(user)
     db.session.add(pet1)
