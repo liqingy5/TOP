@@ -219,11 +219,14 @@ def home():
 @app.route('/schedule', methods=['GET', 'POST'])
 @login_required
 def schedule():
+    today = datetime.today().date()
+    choosebleDate = [today + timedelta(days=i) for i in range(1,8)]
     if request.method == 'POST':
         pet_id = int(request.form['pet'])
-        date = request.form['date']
+        date = request.form['weekdaysSelect']
         droptime = request.form['dropOffTime']
         picktime = request.form['pickUpTime']
+        print(date)
         print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
               (pet, date, droptime, picktime))
         print(request.form['submitBtn'])
@@ -261,7 +264,7 @@ def schedule():
         # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
         # mysql.connection.commit()
     pets = User.query.get(current_user.id).pets
-    return render_template('/components/schedule.html', pets=pets)
+    return render_template('/components/schedule.html', pets=pets,choosebleDate = choosebleDate)
 
 
 
