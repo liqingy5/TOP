@@ -103,12 +103,11 @@ def forge():
     pet2 = Pet(name='Yoda', type='Cat', breed='Russian Blue', age=18, weight=10,
                activity_level=3, food_preference='raw meat', user=user)
     weeks1 = [1,2,3]
-    time_from_1 = datetime.now()
-    time_to_1 = (datetime.now() +timedelta(hours=5))
+    time_from_1 = datetime.strptime('10:00', '%H:%M')
+    time_to_1 = datetime.strptime('12:00', '%H:%M')
     weeks2= [4,5,6]
-    time_from_2 = (datetime.now() -
-                  timedelta(hours=1))
-    time_to_2 = (datetime.now() + timedelta(hours=4))
+    time_from_2 = datetime.strptime('13:00', '%H:%M')
+    time_to_2 = datetime.strptime('15:00', '%H:%M')
     
     senior1 = Senior(age=50, fav_type="1,2,4,",
                      fav_activity=1, week=weeks1,time_from=time_from_1,time_to=time_to_1, user=user1)
