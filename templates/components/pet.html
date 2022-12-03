@@ -35,25 +35,23 @@
             </div>
 
             <div class="formInput">
-                <label for="petAge">Pet's Age (In months):</label>
-                <input class="input" type="number" id="petAge" name="petAge"
-                    value={% if pet %} {{pet.age}} {% endif %} required>
+                <label for="petAge">Pet's Age (months):</label>
+                <input class="input" type="number" id="petAge" name="petAge" value={% if pet %} {{pet.age}} {% endif %}
+                    required>
             </div>
 
             <div class="formInput">
-                <label for="petWeight">Pet's Weight (In lbs):</label>
-                <input class="input" type="number" id="petWeight" name="petWeight"
-                    value={% if pet %} {{pet.weight}} {% endif %} required>
+                <label for="petWeight">Pet's Weight (lbs):</label>
+                <input class="input" type="number" id="petWeight" name="petWeight" value={% if pet %} {{pet.weight}} {%
+                    endif %} required>
             </div>
 
             <div class="formInput">
                 <label for="petAcitivityLevel">Pet's Acativity Level:</label>
                 <select name="petActivity" id="petActivity">
-                    <option value=1 {% if not pet or (pet and pet.activity_level==1 ) %}
-                        selected {% endif %}>Annoying
+                    <option value=1 {% if not pet or (pet and pet.activity_level==1 ) %} selected {% endif %}>Annoying
                     </option>
-                    <option value=2 {% if pet and pet.activity_level==2 %} selected {% endif
-                        %}>
+                    <option value=2 {% if pet and pet.activity_level==2 %} selected {% endif %}>
                         Moderate
                     </option>
                     <option value=3 {% if pet and pet.activity_level==3 %} selected {% endif %}>

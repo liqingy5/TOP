@@ -20,7 +20,7 @@
 }
 
 .prefForm {
-    width: 508px;
+    width: 700px;
     left: 466px;
     top: 230px;
 
@@ -55,20 +55,23 @@
     margin-bottom: 10px;
     text-align: left
 }
-.multipleSelect{
+
+.multipleSelect {
     margin-left: 0;
     text-align: right;
 }
-.multipleSelect label{
-    float:left
+
+.multipleSelect label {
+    float: left
 }
-.multipleSelect select{
+
+.multipleSelect select {
     font-family: 'Kaisei Decol';
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
     line-height: 29px;
-    margin-right:3em;
+    margin-right: 3em;
     margin-bottom: 2px;
 }
 

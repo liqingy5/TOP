@@ -12,30 +12,31 @@
         <form method="post">
             <h1>Review/Update your preference and availability</h1>
             <div class="formInput">
-                <label for="seniorAge">Your age(In years):</label>
-                <input class="input" type="number" id="seniorAge" name="seniorAge" value="" required>
+                <label for="seniorAge">Your age(years):</label>
+                <input class="input" type="number" id="seniorAge" name="seniorAge" value={% if senior %} {{senior.age}}
+                    {% endif %} required>
             </div>
             <div class="multipleSelect">
                 <label for="typeSelect"> Pets'type preference</label>
-                <select id="typeSelect" name="typeSelect" multiple required>       
-                    <option value=1>Big Dog</option>
-                    <option value=2>Medium Dog</option>
-                    <option value=3>Small Dog</option>
-                    <option value=4>Cat</option>
+                <select id="typeSelect" name="typeSelect" multiple required>
+                    <option value=1 {% if senior and (1 in senior.fav_type) %} selected {% endif %}>Big Dog</option>
+                    <option value=2 {% if senior and (2 in senior.fav_type) %} selected {% endif %}>Medium Dog
+                    </option>
+                    <option value=3 {% if senior and (3 in senior.fav_type) %} selected {% endif %}>Small Dog
+                    </option>
+                    <option value=4 {% if senior and (4 in senior.fav_type)%} selected {% endif %}>Cat</option>
                 </select>
             </div>
-            
+
             <div class="formInput">
                 <label for="fav_activity">Pet's activity level preferene:</label>
                 <select name="petActivity" id="petActivity" required>
-                    <option value=1 {% if not pet or (pet and pet.activity_level==1 ) %}
-                        selected {% endif %}>Annoying
+                    <option value=1 {% if senior and senior.fav_activity==1 %} selected {% endif %}>Annoying
                     </option>
-                    <option value=2 {% if pet and pet.activity_level==2 %} selected {% endif
-                        %}>
+                    <option value=2 {% if senior and senior.fav_activity==2 %} selected {% endif %}>
                         Moderate
                     </option>
-                    <option value=3 {% if pet and pet.activity_level==3 %} selected {% endif %}>
+                    <option value=3 {% if senior and senior.fav_activity==3 %} selected {% endif %}>
                         Quiet
                     </option>
                 </select>
@@ -43,27 +44,27 @@
             <h2>Availability</h2>
             <div class="multipleSelect">
                 <label for="weekdaysSelect">weekdays</label>
-                <select id="weekdaysSelect" name="weekdaysSelect" multiple required>       
-                    <option value=1>Monday</option>
-                    <option value=2>Tuesday</option>
-                    <option value=3>Wednesday</option>
-                    <option value=4>Thursday</option>
-                    <option value=5>Friday</option>
-                    <option value=6>Saturday</option>
-                    <option value=7>Sunday</option>
+                <select id="weekdaysSelect" name="weekdaysSelect" multiple required>
+                    <option value=1 {% if senior and (1 in senior.weekday)%} selected {% endif %}>Monday</option>
+                    <option value=2 {% if senior and (2 in senior.weekday)%} selected {% endif %}>Tuesday</option>
+                    <option value=3 {% if senior and (3 in senior.weekday)%} selected {% endif %}>Wednesday</option>
+                    <option value=4 {% if senior and (4 in senior.weekday) %} selected {% endif %}>Thursday</option>
+                    <option value=5 {% if senior and (5 in senior.weekday)%} selected {% endif %}>Friday</option>
+                    <option value=6 {% if senior and (6 in senior.weekday)%} selected {% endif %}>Saturday</option>
+                    <option value=7 {% if senior and (7 in senior.weekday)%} selected {% endif %}>Sunday</option>
                 </select>
             </div>
             <div class="formInput">
                 <label for="from">From</label>
 
-                <input class="input" type="time" id="from" name="from"
-                    min="09:00" max="18:00" required>
+                <input class="input" type="time" id="from" name="from" value={% if senior %} {{time_from}} {% endif %}
+                    required>
             </div>
             <div class="formInput">
                 <label for="to">To</label>
 
-                <input class="input" type="time" id="to" name="to"
-                    min="09:00" max="18:00" required>
+                <input class="input" type="time" id="to" name="to" value={% if senior %} {{time_to}} {% endif %}
+                    required>
             </div>
 
             <div class="prefButton">

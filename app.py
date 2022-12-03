@@ -283,26 +283,38 @@ def myInfo():
 @app.route('/seniorPref', methods=['GET', 'POST'])
 @login_required
 def seniorPref():
-    user = User.query.get(current_user.id)
-    age = db.Column(db.Integer)
-    fav_type = db.Column(db.String(20))
-    fav_activity = db.Column(db.Integer)
+    senior = User.query.get(current_user.id).senior
+    print(senior)
+    if not senior:
+        senior = Senior()
+        senior.user_id = current_user.id
     if(request.method == 'POST'):
         age = request.form['seniorAge']
-        fav_type = request.form.getlist('fav_type')
-        fav_activity = request.form['fav_activity']
-        weekdays = request.form.getlist('weekdaysSelect')
+        fav_type = request.form.getlist('typeSelect')
+        fav_type = [eval(i) for i in fav_type]
+        fav_activity = request.form['petActivity']
+        weekday = request.form.getlist('weekdaysSelect')
+        weekday = [eval(i) for i in weekday]
         time_from = request.form['from']
+        time_from = datetime.strptime(time_from, '%H:%M')
         time_to = request.form['to']
-        if not age or not fav_type or not fav_activity or not weekdays or not time_from or not time_to:
+        time_to = datetime.strptime(time_to, '%H:%M')
+        if not age or not fav_type or not fav_activity or not weekday or not time_from or not time_to:
             flash('Invalid input.')
             return redirect(url_for('seniorPref'))
-        # user.name = name
-        # user.phone = phone
-        # user.address = address
-        # db.session.commit()
-        flash('Pref Update success.')
-    return render_template('/components/seniorPrefer.html', user=user)
+        
+        senior.age = age
+        senior.fav_type = fav_type
+        senior.fav_activity = fav_activity
+        senior.weekday = weekday
+        senior.time_from = time_from
+        senior.time_to = time_to
+
+        db.session.add(senior)
+        db.session.commit()
+        flash('Preference Update success.')
+    print(senior.time_from.strftime('%H:%M'))
+    return render_template('/components/seniorPrefer.html', senior=senior,time_from=senior.time_from.strftime('%H:%M'),time_to=senior.time_to.strftime('%H:%M'))
 
 
 @app.route('/petsList/delete/<int:pet_id>', methods=['GET', 'POST'])
