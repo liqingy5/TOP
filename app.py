@@ -65,7 +65,9 @@ class Senior(db.Model):
     age = db.Column(db.Integer)
     fav_type = db.Column(db.String(20))
     fav_activity = db.Column(db.Integer)
-    time = db.Column(db.PickleType)
+    week=db.Column(db.PickleType)
+    time_from = db.Column(db.DateTime)
+    time_to = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
@@ -100,15 +102,18 @@ def forge():
                activity_level=1, food_preference='raw meat', user=user)
     pet2 = Pet(name='Yoda', type='Cat', breed='Russian Blue', age=18, weight=10,
                activity_level=3, food_preference='raw meat', user=user)
-    time1 = {1: [datetime.now().time(), (datetime.now() +
-                                         timedelta(hours=5)).time()]}
-    time2 = {2: [(datetime.now() -
-                  timedelta(hours=1)).time(), (datetime.now() +
-                                               timedelta(hours=3)).time()]}
+    weeks1 = [1,2,3]
+    time_from_1 = datetime.now()
+    time_to_1 = (datetime.now() +timedelta(hours=5))
+    weeks2= [4,5,6]
+    time_from_2 = (datetime.now() -
+                  timedelta(hours=1))
+    time_to_2 = (datetime.now() + timedelta(hours=4))
+    
     senior1 = Senior(age=50, fav_type="1,2,4,",
-                     fav_activity=1, time=time1, user=user1)
-    senior2 = Senior(age=66, fav_type="4", fav_activity=3,
-                     time=time2, user=user2)
+                     fav_activity=1, week=weeks1,time_from=time_from_1,time_to=time_to_1, user=user1)
+    senior2 = Senior(age=66, fav_type="4", fav_activity=3,week=weeks2,
+                     time_from=time_from_2,time_to=time_to_2, user=user2)
     db.session.add(user)
     db.session.add(pet1)
     db.session.add(pet2)
