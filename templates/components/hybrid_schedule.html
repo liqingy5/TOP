@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/seniorList.css') }}" type="text/css">
+<link rel="script" href="{{ url_for('static', filename='/js/seniorList.js') }}" type="text/css">
+<script src="{{ url_for('static', filename='js/seniorList.js') }}">
+    alert("This alert box was called with the onload event");
+</script>
+
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="senior_list">
+    <h1 class="senior_list_title">Here are the top 5 seniors for your pet:</h1>
+
+    <div class="cards">
+
+        {% for i in range(seniors|length) %}
+            <div class="card">
+                <img src="{{ url_for('static', filename='/images/brad-pitt.jpg') }}"/>
+                <input type="checkbox"/>
+                <p>Name: {{ users[i].name }}</p>
+                <p>Gender: Male</p>
+                <p>Age:{{ seniors[i].age }}</p>
+                <p>Pet Preference:
+                    {% if 1 in seniors[i].fav_type %} Big Dog, {% endif %}
+                    {% if 2 in seniors[i].fav_type %} Medium Dog, {% endif %}
+                    {% if 3 in seniors[i].fav_type %} Small Dog, {% endif %}
+                    {% if 4 in seniors[i].fav_type %} Cat, {% endif %}
+                </p>
+
+            </div>
+        {% endfor %}
+
+        <div class="btn">
+            <a href="{{ url_for('confirm') }}">Confirm</a>
+        </div>
+
+
+    </div>
+
+</div>
+{% endblock %}
