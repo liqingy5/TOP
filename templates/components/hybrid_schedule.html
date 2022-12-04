@@ -12,33 +12,43 @@
 {% block content %}
 {{ super() }}
 <div class="senior_list">
-    <h1 class="senior_list_title">Here are the top 5 seniors for your pet:</h1>
-
-    <div class="cards">
-
-        {% for i in range(seniors|length) %}
-            <div class="card">
-                <img src="{{ url_for('static', filename='/images/brad-pitt.jpg') }}"/>
-                <input type="checkbox"/>
-                <p>Name: {{ users[i].name }}</p>
-                <p>Gender: Male</p>
-                <p>Age:{{ seniors[i].age }}</p>
-                <p>Pet Preference:
-                    {% if 1 in seniors[i].fav_type %} Big Dog, {% endif %}
-                    {% if 2 in seniors[i].fav_type %} Medium Dog, {% endif %}
-                    {% if 3 in seniors[i].fav_type %} Small Dog, {% endif %}
-                    {% if 4 in seniors[i].fav_type %} Cat, {% endif %}
-                </p>
-
-            </div>
-        {% endfor %}
-
+    {% if seniors|length <= 0 %}
+        <h1 class="senior_list_title">No senior available</h1>
         <div class="btn">
-            <a href="{{ url_for('confirm') }}">Confirm</a>
+            <a href="{{ url_for('schedule') }}">Back</a>
         </div>
+    {% endif %}
+
+    {% if seniors|length > 0 %}
+        <h1 class="senior_list_title">Here are the top 5 seniors for your pet:</h1>
+
+        <div class="cards">
+
+            {% for i in range(seniors|length) %}
+                <div class="card" id="{{ seniors[i].id }}">
+                    <img src="{{ url_for('static', filename='/images/profile_icon.png') }}"/>
+                    <p>Name: {{ users[i].name }}</p>
+                    <p>Age:{{ seniors[i].age }}</p>
+                    <p>Pet Preference:
+                        {% if 1 in seniors[i].fav_type %} Big Dog, {% endif %}
+                        {% if 2 in seniors[i].fav_type %} Medium Dog, {% endif %}
+                        {% if 3 in seniors[i].fav_type %} Small Dog, {% endif %}
+                        {% if 4 in seniors[i].fav_type %} Cat, {% endif %}
+                    </p>
+
+                </div>
+                <form action="{{ url_for('confirm')}}" method="post">
+                    <input class="ghost" name="senior_id" value="{{ seniors[i].id }}">
+                    <input class="ghost" name="pet_id" value="{{ pet_id }}">
+                    <input class="ghost" name="droptime" value="{{ droptime }}">
+                    <input class="ghost" name="picktime" value="{{ picktime }}">
+                    <input class="btn" id="btn" type="submit" value="Select {{ users[i].name }}" name="submitBtn">
+                </form>
+            {% endfor %}
 
 
-    </div>
+        </div>
+    {% endif %}
 
 </div>
 {% endblock %}

@@ -24,8 +24,12 @@
 
             <div class="formInput">
                 <label for="petType">Pet's Type:</label>
-                <input class="input" type="text" id="petType" name="petType"
-                    value="{% if pet %} {{pet.type.strip()}} {% endif %}" required>
+                <select id="petType" name="petType" required>
+                    <option value=1 {% if pet and pet.type==1 %} selected {% endif %}>Big Dog</option>
+                    <option value=2 {% if pet and pet.type==2 %} selected {% endif %}>Medium Dog</option>
+                    <option value=3 {% if pet and pet.type==3 %} selected {% endif %}>Small Dog</option>
+                    <option value=4 {% if pet and pet.type==4 %} selected {% endif %}>Cat</option>
+                </select>
             </div>
 
             <div class="formInput">

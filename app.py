@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, logout_user, login_user, current_user
 from datetime import datetime, timedelta
+import random
 
 
 import click
@@ -52,7 +53,7 @@ class User(db.Model, UserMixin):
 class Pet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
-    type = db.Column(db.String(20))
+    type = db.Column(db.Integer)
     breed = db.Column(db.String(20))
     age = db.Column(db.Integer)
     weight = db.Column(db.Integer)
@@ -74,7 +75,7 @@ class Senior(db.Model):
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    weekday = db.Column(db.PickleType)
+    date = db.Column(db.DateTime)
     dropOff = db.Column(db.DateTime)
     pickUp = db.Column(db.DateTime)
     pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'))
@@ -99,9 +100,9 @@ def forge():
     user.set_password('1234')
     user1.set_password('5678')
     user2.set_password('1357')
-    pet1 = Pet(name='Dobby', type='Cat', breed='Abyssinian', age=6, weight=7,
+    pet1 = Pet(name='Dobby', type=4, breed='Abyssinian', age=6, weight=7,
                activity_level=1, food_preference='raw meat', user=user)
-    pet2 = Pet(name='Yoda', type='Cat', breed='Russian Blue', age=18, weight=10,
+    pet2 = Pet(name='Yoda', type=4, breed='Russian Blue', age=18, weight=10,
                activity_level=3, food_preference='raw meat', user=user)
     
     today = datetime.today().strftime('%Y-%m-%d')
@@ -110,7 +111,7 @@ def forge():
     time_from_1 = datetime.strptime('10:00', '%H:%M')
     time_to_1 = datetime.strptime('12:00', '%H:%M')
     weeks2 = [today+timedelta(days=i) for i in range(3, 6)]
-    time_from_2 = datetime.strptime('13:00', '%H:%M')
+    time_from_2 = datetime.strptime('10:00', '%H:%M')
     time_to_2 = datetime.strptime('15:00', '%H:%M')
     
     senior1 = Senior(age=50, fav_type=[1,2,4],
@@ -164,8 +165,33 @@ def logout():
     return redirect(url_for('login'))  # 重定向回首页
 
 def generate_senior_list(seniors, pet, droptime, picktime):
+    ret = []
+    required_date = droptime.strftime("%Y-%m-%d")
+    droptime = droptime.strftime("%H:%M:%S")
+    picktime = picktime.strftime("%H:%M:%S")
+    for senior in seniors:
 
-    return seniors
+        if pet.type not in senior.fav_type:
+            continue
+        if pet.activity_level != senior.fav_activity:
+            continue
+        found = False
+
+        for date in senior.weekday:
+            if date.strftime("%Y-%m-%d") == required_date:
+                found = True
+                break
+        if not found:
+            continue
+
+        time_from = senior.time_from.strftime("%H:%M:%S")
+        time_to = senior.time_to.strftime("%H:%M:%S")
+        if droptime<time_from or picktime>time_to:
+            continue
+
+        ret.append(senior)
+
+    return ret
 
 def get_all_users(seniors):
     ret = []
@@ -178,29 +204,76 @@ def get_all_users(seniors):
 def AI_schedule():
     pet_id = request.args['pet_id']
     pet = Pet.query.get(pet_id)
-    droptime = request.args['droptime']
-    picktime = request.args['picktime']
-    print(pet_id)
-    print(pet.name.strip())
-    print(pet.type.strip())
+    droptime = datetime.strptime(request.args['droptime'], "%Y-%m-%d %H:%M:%S")
+    picktime = datetime.strptime(request.args['picktime'], "%Y-%m-%d %H:%M:%S")
     seniors = Senior.query.all()
     seniors_aval = generate_senior_list(seniors, pet, droptime, picktime)
     users = get_all_users(seniors_aval)
-    print(users)
-    return render_template('/components/AI_schedule.html', seniors=seniors_aval, users=users)
+    if len(seniors_aval)>=1:
+        seniors_aval = seniors_aval[0:1]
+        users = users[0:1]
+    return render_template('/components/AI_schedule.html',
+                           seniors=seniors_aval,
+                           users=users,
+                           pet_id=pet_id,
+                           droptime=droptime,
+                           picktime=picktime,
+                           )
 
 @app.route('/hybrid_schedule')
 def hybrid_schedule():
-    return render_template('/components/hybrid_schedule.html')
+    pet_id = request.args['pet_id']
+    pet = Pet.query.get(pet_id)
+    droptime = datetime.strptime(request.args['droptime'], "%Y-%m-%d %H:%M:%S")
+    picktime = datetime.strptime(request.args['picktime'], "%Y-%m-%d %H:%M:%S")
+    seniors = Senior.query.all()
+    seniors_aval = generate_senior_list(seniors, pet, droptime, picktime)
+    users = get_all_users(seniors_aval)
+    if len(seniors_aval)>=5:
+        seniors_aval = seniors_aval[0:5]
+        users = users[0:5]
+    return render_template('/components/hybrid_schedule.html',
+                           seniors=seniors_aval,
+                           users=users,
+                           pet_id=pet_id,
+                           droptime=droptime,
+                           picktime=picktime,
+                           )
 
 
 @app.route('/manual_schedule')
 def manual_schedule():
-    return render_template('/components/manual_schedule.html')
+    pet_id = request.args['pet_id']
+    pet = Pet.query.get(pet_id)
+    droptime = datetime.strptime(request.args['droptime'], "%Y-%m-%d %H:%M:%S")
+    picktime = datetime.strptime(request.args['picktime'], "%Y-%m-%d %H:%M:%S")
+    seniors = Senior.query.all()
+    seniors_aval = generate_senior_list(seniors, pet, droptime, picktime)
+    users = get_all_users(seniors_aval)
+    return render_template('/components/manual_schedule.html',
+                           seniors=seniors_aval,
+                           users=users,
+                           pet_id=pet_id,
+                           droptime=droptime,
+                           picktime=picktime,
+                           )
 
 
-@app.route('/confirm')
+@app.route('/confirm', methods=['POST'])
 def confirm():
+    date = datetime.strptime(request.form['droptime'].split()[0], "%Y-%m-%d")
+    dropOff = datetime.strptime(request.form['droptime'].split()[1], "%H:%M:%S")
+    pickUp = datetime.strptime(request.form['picktime'].split()[1], "%H:%M:%S")
+    pet_id = request.form['pet_id']
+    senior_id = request.form['senior_id']
+    schedule = Schedule(date=date,
+                        dropOff=dropOff,
+                        pickUp=pickUp,
+                        pet_id=pet_id,
+                        senior_id=senior_id,
+                        user_id=current_user.id)
+    db.session.add(schedule)
+    db.session.commit()
     return render_template('/components/confirm.html')
 
 
@@ -227,9 +300,9 @@ def schedule():
         droptime = request.form['dropOffTime']
         picktime = request.form['pickUpTime']
         print(date)
-        print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
-              (pet, date, droptime, picktime))
-        print(request.form['submitBtn'])
+        # print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
+        #       (pet, date, droptime, picktime))
+        # print(request.form['submitBtn'])
 
         print(datetime.strptime('12:00', '%H:%M'))
         if pet_id == '' or date == '' or droptime == '' or picktime == '':
@@ -256,10 +329,10 @@ def schedule():
             return redirect(url_for('AI_schedule', pet_id=pet_id, droptime=droptime, picktime=picktime))
         elif request.form['submitBtn'] == "I'll choose from the top-5 subitable senior citizens":
             print("Pet owner chooses to select from the top 5 seniors")
-            return redirect('hybrid_schedule')
+            return redirect(url_for('hybrid_schedule', pet_id=pet_id, droptime=droptime, picktime=picktime))
         else:
             print("Pet owner chooses to manual select senior for pet")
-            return redirect(url_for('manual_schedule'))
+            return redirect(url_for('manual_schedule', pet_id=pet_id, droptime=droptime, picktime=picktime))
         # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
         # mysql.connection.commit()
@@ -411,5 +484,5 @@ def petsList():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=8000, debug=True)
 
