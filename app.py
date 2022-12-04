@@ -305,7 +305,11 @@ def schedule():
         # print(request.form['submitBtn'])
 
         print(datetime.strptime('12:00', '%H:%M'))
-        if pet_id == '' or date == '' or droptime == '' or picktime == '':
+        if(pet_id==-1):
+            flash("You don't have any pet!")
+            return redirect(url_for('schedule'))
+        
+        if date == '' or droptime == '' or picktime == '':
             flash('Invalid date or time.')
             return redirect('schedule')
 
@@ -358,6 +362,32 @@ def myInfo():
         db.session.commit()
         flash('Update success.')
     return render_template('/components/info.html', user=user)
+
+
+@app.route('/sessions', methods=['GET', 'POST'])
+@login_required
+def sessions():
+    # sessions = [[1,"Dobby","Elon Mask",datetime.strptime("2022-12-05", '%Y-%m-%d'),datetime.strptime('10:00', '%H:%M'),datetime.strptime('16:00', '%H:%M')],
+    # [2,"Yoda","Brad Pitt",datetime.strptime("2022-12-02", '%Y-%m-%d'),datetime.strptime('10:00', '%H:%M'),datetime.strptime('16:00', '%H:%M')],
+    # [3,"Yoda","Brad Pitt",datetime.strptime("2022-12-03", '%Y-%m-%d'),datetime.strptime('10:00', '%H:%M'),datetime.strptime('20:00', '%H:%M')]]
+    # sessions.sort(key=lambda x: (x[3],x[5]),reverse=True)
+
+    sessions = Schedule.query.filter_by(user_id=current_user.id).all()
+    for session in sessions:
+        senior_user_id = Senior.query.get(session.senior_id).user_id
+        session.senior = User.query.get(senior_user_id).name
+        session.pet = Pet.query.get(session.pet_id).name
+    return render_template('/components/sessions.html',sessions = sessions,todayDate = datetime.today().date(),todayTime = datetime.today().time())
+
+@app.route('/sessionDelete/<int:sessionID>')
+@login_required
+def sessionDelete(sessionID):
+    session = Schedule.query.get(sessionID)
+    db.session.delete(session)
+    db.session.commit()
+    flash('Delete success.')
+    return redirect(url_for('sessions'))
+
 
 
 @app.route('/seniorPref', methods=['GET', 'POST'])

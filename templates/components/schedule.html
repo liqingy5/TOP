@@ -14,9 +14,13 @@
             <div>
                 <label for="pet">Select your pet:</label>
                 <select name="pet" id="pet">
+                    {% if pets %}
                     {% for i in range(pets|length) %}
                     <option value="{{ pets[i].id }}">{{ pets[i].name }}</option>
                     {% endfor %}
+                    {% else %}
+                    <option value=-1>No pet</option>
+                    {% endif %}
                 </select>
             </div>
             <div>
