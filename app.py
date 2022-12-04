@@ -294,11 +294,12 @@ def seniorPref():
     today = datetime.today().date()
     choosebleDate = [today + timedelta(days=i) for i in range(1,8)]
     seniorAvaliability=[]
-    if not senior:
-        senior = Senior()
-        senior.user_id = current_user.id
-    else:
+    seniorTimeFrom = None
+    seniorTimeTo = None
+    if senior:
         seniorAvaliability = [x.date() for x in senior.weekday]
+        seniorTimeFrom = senior.time_from.strftime('%H:%M')
+        seniorTimeTo = senior.time_to.strftime('%H:%M')
 
     if(request.method == 'POST'):
         age = request.form['seniorAge']
@@ -315,6 +316,10 @@ def seniorPref():
             flash('Invalid input.')
             return redirect(url_for('seniorPref'))
         
+        if not senior:
+            senior = Senior()
+            senior.user_id = current_user.id
+
         senior.age = age
         senior.fav_type = fav_type
         senior.fav_activity = fav_activity
@@ -326,7 +331,9 @@ def seniorPref():
         db.session.commit()
         flash('Preference Update success.')
         seniorAvaliability = [x.date() for x in senior.weekday]
-    return render_template('/components/seniorPrefer.html', senior=senior,choosebleDate = choosebleDate,seniorAvaliability = seniorAvaliability,time_from=senior.time_from.strftime('%H:%M'),time_to=senior.time_to.strftime('%H:%M'))
+        seniorTimeFrom = senior.time_from.strftime('%H:%M')
+        seniorTimeTo = senior.time_to.strftime('%H:%M')
+    return render_template('/components/seniorPrefer.html', senior=senior,choosebleDate = choosebleDate,seniorAvaliability = seniorAvaliability,time_from=seniorTimeFrom,time_to=seniorTimeTo)
 
 
 @app.route('/petsList/delete/<int:pet_id>', methods=['GET', 'POST'])
