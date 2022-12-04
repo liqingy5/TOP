@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, logout_user, login_user, current_user
 from datetime import datetime, timedelta
 
+
 import click
 
 
@@ -102,10 +103,13 @@ def forge():
                activity_level=1, food_preference='raw meat', user=user)
     pet2 = Pet(name='Yoda', type='Cat', breed='Russian Blue', age=18, weight=10,
                activity_level=3, food_preference='raw meat', user=user)
-    weeks1 = [1,2,3]
+    
+    today = datetime.today().strftime('%Y-%m-%d')
+    today = datetime.strptime(today, '%Y-%m-%d')
+    weeks1 = [today+timedelta(days=i) for i in range(5, 8)]
     time_from_1 = datetime.strptime('10:00', '%H:%M')
     time_to_1 = datetime.strptime('12:00', '%H:%M')
-    weeks2= [4,5,6]
+    weeks2 = [today+timedelta(days=i) for i in range(3, 6)]
     time_from_2 = datetime.strptime('13:00', '%H:%M')
     time_to_2 = datetime.strptime('15:00', '%H:%M')
     
@@ -215,11 +219,14 @@ def home():
 @app.route('/schedule', methods=['GET', 'POST'])
 @login_required
 def schedule():
+    today = datetime.today().date()
+    choosebleDate = [today + timedelta(days=i) for i in range(1,8)]
     if request.method == 'POST':
         pet_id = int(request.form['pet'])
-        date = request.form['date']
+        date = request.form['weekdaysSelect']
         droptime = request.form['dropOffTime']
         picktime = request.form['pickUpTime']
+        print(date)
         print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
               (pet, date, droptime, picktime))
         print(request.form['submitBtn'])
@@ -257,7 +264,7 @@ def schedule():
         # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
         # mysql.connection.commit()
     pets = User.query.get(current_user.id).pets
-    return render_template('/components/schedule.html', pets=pets)
+    return render_template('/components/schedule.html', pets=pets,choosebleDate = choosebleDate)
 
 
 
@@ -278,6 +285,55 @@ def myInfo():
         db.session.commit()
         flash('Update success.')
     return render_template('/components/info.html', user=user)
+
+
+@app.route('/seniorPref', methods=['GET', 'POST'])
+@login_required
+def seniorPref():
+    senior = User.query.get(current_user.id).senior
+    today = datetime.today().date()
+    choosebleDate = [today + timedelta(days=i) for i in range(1,8)]
+    seniorAvaliability=[]
+    seniorTimeFrom = None
+    seniorTimeTo = None
+    if senior:
+        seniorAvaliability = [x.date() for x in senior.weekday]
+        seniorTimeFrom = senior.time_from.strftime('%H:%M')
+        seniorTimeTo = senior.time_to.strftime('%H:%M')
+
+    if(request.method == 'POST'):
+        age = request.form['seniorAge']
+        fav_type = request.form.getlist('typeSelect')
+        fav_type = [eval(i) for i in fav_type]
+        fav_activity = request.form['petActivity']
+        weekday = request.form.getlist('weekdaysSelect')
+        weekday = [datetime.strptime(i,'%Y-%m-%d') for i in weekday]
+        time_from = request.form['from']
+        time_from = datetime.strptime(time_from, '%H:%M')
+        time_to = request.form['to']
+        time_to = datetime.strptime(time_to, '%H:%M')
+        if not age or not fav_type or not fav_activity or not weekday or not time_from or not time_to:
+            flash('Invalid input.')
+            return redirect(url_for('seniorPref'))
+        
+        if not senior:
+            senior = Senior()
+            senior.user_id = current_user.id
+
+        senior.age = age
+        senior.fav_type = fav_type
+        senior.fav_activity = fav_activity
+        senior.weekday = weekday
+        senior.time_from = time_from
+        senior.time_to = time_to
+
+        db.session.add(senior)
+        db.session.commit()
+        flash('Preference Update success.')
+        seniorAvaliability = [x.date() for x in senior.weekday]
+        seniorTimeFrom = senior.time_from.strftime('%H:%M')
+        seniorTimeTo = senior.time_to.strftime('%H:%M')
+    return render_template('/components/seniorPrefer.html', senior=senior,choosebleDate = choosebleDate,seniorAvaliability = seniorAvaliability,time_from=seniorTimeFrom,time_to=seniorTimeTo)
 
 
 @app.route('/petsList/delete/<int:pet_id>', methods=['GET', 'POST'])

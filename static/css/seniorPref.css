@@ -1,4 +1,4 @@
-.schedule {
+.pref {
     float: left;
     text-align: center;
     margin: auto;
@@ -7,7 +7,7 @@
     margin-top: 5em;
 }
 
-.schedule_title {
+.pref_title {
 
     font-family: 'Kaisei Decol';
     font-style: normal;
@@ -19,8 +19,8 @@
     color: black;
 }
 
-.scheduleForm {
-    width: 508px;
+.prefForm {
+    width: 700px;
     left: 466px;
     top: 230px;
 
@@ -32,8 +32,7 @@
     border-radius: 15px;
 }
 
-
-.scheduleForm h1 {
+.prefForm h1 {
     padding: 2em;
     font-family: 'Kaisei Decol';
     font-style: normal;
@@ -50,14 +49,34 @@
     color: #000000;
 }
 
-.scheduleForm div {
+.prefForm .formInput {
     margin: 0;
     padding: 0;
     margin-bottom: 10px;
     text-align: left
 }
 
-.scheduleForm label {
+.multipleSelect {
+    margin-left: 0;
+    text-align: right;
+}
+
+.multipleSelect label {
+    float: left
+}
+
+.multipleSelect select {
+    font-family: 'Kaisei Decol';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 29px;
+    margin-right: 3em;
+    margin-bottom: 2px;
+}
+
+
+.prefForm label {
     text-align: left;
     margin-left: 3em;
 
@@ -70,7 +89,7 @@
 
 }
 
-.scheduleForm select,
+.formInput select,
 .input {
     float: right;
     margin-right: 3em;
@@ -85,44 +104,15 @@
 
 }
 
-.multipleSelect {
-    margin-left: 0;
-    text-align: right;
-    margin-bottom: 3em;
-
-}
-
-
-.multipleSelect select {
-    font-family: 'Kaisei Decol';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 29px;
-    margin-right: 3em;
-    margin-bottom: 2px;
-}
-
-
-.scheduleButtons p {
-    text-align: left;
-    margin-left: 3em;
-
-    font-family: 'Kaisei Decol';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 29px;
-    color: #000000;
+.prefButton {
+    text-align: center;
 }
 
 .btn {
-
-
     background: rgba(174, 110, 52, 0.78);
     border-radius: 11px;
 
-    margin-left: 3em;
+    margin-top: 3em;
     margin-bottom: 1em;
 
     font-family: 'Kaisei Decol';
@@ -131,12 +121,5 @@
     font-size: 20px;
     line-height: 29px;
     /* identical to box height */
-
-    text-align: center;
     color: #FFFFFF;
-}
-
-.btn:hover {
-    background-color: rgba(21, 12, 4, 0.6);
-
 }

@@ -1,0 +1,74 @@
+{% extends "index.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/seniorPref.css') }}" type="text/css">
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="pref">
+    <h1 class="pref_title">Your preference</h1>
+    <div class="prefForm">
+        <form method="post">
+            <h1>Review/Update your preference and availability</h1>
+            <div class="formInput">
+                <label for="seniorAge">Your age(years):</label>
+                <input class="input" type="number" id="seniorAge" name="seniorAge" value={% if senior %} {{senior.age}}
+                    {% endif %} required>
+            </div>
+            <div class="multipleSelect">
+                <label for="typeSelect"> Pets'type preference</label>
+                <select id="typeSelect" name="typeSelect" multiple required>
+                    <option value=1 {% if senior and (1 in senior.fav_type) %} selected {% endif %}>Big Dog</option>
+                    <option value=2 {% if senior and (2 in senior.fav_type) %} selected {% endif %}>Medium Dog
+                    </option>
+                    <option value=3 {% if senior and (3 in senior.fav_type) %} selected {% endif %}>Small Dog
+                    </option>
+                    <option value=4 {% if senior and (4 in senior.fav_type)%} selected {% endif %}>Cat</option>
+                </select>
+            </div>
+
+            <div class="formInput">
+                <label for="fav_activity">Pet's activity level preferene:</label>
+                <select name="petActivity" id="petActivity" required>
+                    <option value=1 {% if senior and senior.fav_activity==1 %} selected {% endif %}>Annoying
+                    </option>
+                    <option value=2 {% if senior and senior.fav_activity==2 %} selected {% endif %}>
+                        Moderate
+                    </option>
+                    <option value=3 {% if senior and senior.fav_activity==3 %} selected {% endif %}>
+                        Quiet
+                    </option>
+                </select>
+            </div>
+            <h2>Availability</h2>
+            <div class="multipleSelect">
+                <label for="weekdaysSelect">Date (in one week)</label>
+                <select id="weekdaysSelect" name="weekdaysSelect" multiple required>
+                    {% for date in choosebleDate %}
+                    <option value={{date}} {% if senior and (date in seniorAvaliability) %} selected {% endif %}>
+                        {{date}}
+                        {% endfor %}
+                </select>
+            </div>
+            <div class="formInput">
+                <label for="from">From</label>
+
+                <input class="input" type="time" id="from" name="from" value={% if senior %} {{time_from}} {% endif %}
+                    required>
+            </div>
+            <div class="formInput">
+                <label for="to">To</label>
+
+                <input class="input" type="time" id="to" name="to" value={% if senior %} {{time_to}} {% endif %}
+                    required>
+            </div>
+
+            <div class="prefButton">
+                <input class="btn" type="submit" value="Update">
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -15,14 +15,9 @@
                 <label for="pet">Select your pet:</label>
                 <select name="pet" id="pet">
                     {% for i in range(pets|length) %}
-                        <option value="{{ pets[i].id }}">{{ pets[i].name }}</option>
+                    <option value="{{ pets[i].id }}">{{ pets[i].name }}</option>
                     {% endfor %}
                 </select>
-            </div>
-            <div>
-
-                <label for="date">Date:</label>
-                <input class="input" type="date" id="date" name="date">
             </div>
             <div>
 
@@ -34,12 +29,24 @@
                 <label for="time">Pick-up Time:</label>
                 <input class="input" type="time" id="pickUpTime" name="pickUpTime">
             </div>
+            <div class="multipleSelect">
+                <label for="weekdaysSelect">Date (in one week)</label>
+                <select id="weekdaysSelect" name="weekdaysSelect" required>
+                    {% for date in choosebleDate %}
+                    <option value={{date}}>
+                        {{date}}
+                        {% endfor %}
+                </select>
+            </div>
+
             <div class="scheduleButtons">
                 <p>I want my pet to be taken care of by: </p>
                 <input class="btn" type="submit" name="submitBtn" value="The most suitable senior citizen">
-                <input class="btn" type="submit" name="submitBtn" value="I'll choose from the top-5 subitable senior citizens">
+                <input class="btn" type="submit" name="submitBtn"
+                    value="I'll choose from the top-5 subitable senior citizens">
 
-                <input class="btn" type="submit" name="submitBtn" value="I'll choose from all available senior citizens">
+                <input class="btn" type="submit" name="submitBtn"
+                    value="I'll choose from all available senior citizens">
             </div>
 
         </form>
