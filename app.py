@@ -370,12 +370,12 @@ def schedule():
         date = request.form['weekdaysSelect']
         droptime = request.form['dropOffTime']
         picktime = request.form['pickUpTime']
-        print(date)
+        # print(date)
         # print('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)',
         #       (pet, date, droptime, picktime))
         # print(request.form['submitBtn'])
 
-        print(datetime.strptime('12:00', '%H:%M'))
+        # print(datetime.strptime('12:00', '%H:%M'))
         if(pet_id==-1):
             flash("You don't have any pet!",'error')
             return redirect(url_for('schedule'))
@@ -444,9 +444,9 @@ def sessions():
     # sessions.sort(key=lambda x: (x[3],x[5]),reverse=True)
 
     sessions = Schedule.query.filter_by(user_id=current_user.id).all()
-    print(sessions)
+    # print(sessions)
     for session in sessions:
-        print(session.user_id)
+        # print(session.user_id)
         senior_user_id = Senior.query.get(session.senior_id).user_id
         session.senior = User.query.get(senior_user_id).name
         session.pet = Pet.query.get(session.pet_id).name
