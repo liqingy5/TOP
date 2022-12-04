@@ -1,0 +1,67 @@
+{% extends "index.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/sessions.css') }}" type="text/css">
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="sessions">
+    <h1 class="sessions_title">Sessions</h1>
+    <div class="sessionsForm">
+        <form method="get">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Session ID</th>
+                        <th>Pet Name</th>
+                        <th>Senior</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in sessions %}
+                    <tr class={% if (session.date.date() < todayDate) %} "red" {% else %} {% if session.date.date()>
+                        todayDate %}
+                        "blue"
+                        {% else %}
+                        {% if session.pickUp.time() > todayTime %}
+                        "blue"
+                        {% else %}
+                        "red"
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}>
+                        <td>{{session.id}}</td>
+                        <td>{{session.pet}}</td>
+                        <td>{{session.senior}}</td>
+                        <td>{{session.date.date()}}</td>
+                        <td>{{session.dropOff.time().strftime("%H:%M")}}</td>
+                        <td>{{session.pickUp.time().strftime("%H:%M")}}</td>
+                        <td>{% if (session.date.date() < todayDate) %} Finished {% else %} {% if session.date.date()>
+                                todayDate %}
+                                On Going
+                                {% else %}
+                                {% if session.pickUp.time() > todayTime %}
+                                On Going
+                                {% else %}
+                                Finished
+                                {% endif %}
+                                {% endif %}
+                                {% endif %}</td>
+
+                        <td>
+                            <a href="{{ url_for('sessionDelete', sessionID=session.id) }}">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

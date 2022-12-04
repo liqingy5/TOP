@@ -1,0 +1,62 @@
+.sessions {
+    float: left;
+    margin: auto;
+    padding: 0;
+    margin-left: 25em;
+    margin-top: 5em;
+}
+
+.sessions_title {
+
+    font-family: 'Kaisei Decol';
+    font-style: normal;
+    font-weight: 1000;
+    font-size: 38px;
+    line-height: 35px;
+    text-align: center;
+
+    color: black;
+}
+
+.sessionsForm {
+    width: auto;
+    left: 466px;
+    top: 230px;
+
+    background: rgba(140, 123, 96, 0.6);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    /* Note: backdrop-filter has minimal browser support */
+
+    border-radius: 15px;
+}
+
+table {
+    border-collapse: collapse
+}
+
+thead tr {
+    color: #ffffff;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 12px 15px;
+}
+
+.red {
+    background-color: #e28743;
+}
+
+.blue {
+    background-color: #2596be;
+}
+
+.blue:hover {
+    background-color: #7cc0d8;
+}
+
+.red:hover {
+    background-color: #f1c3a1;
+}
