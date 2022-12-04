@@ -97,13 +97,30 @@ def forge():
                  phone='(123)456-7899', address='Twitter HQ')
     user2 = User(username='1357', name='Brad Pitt',
                  phone='(789)123-4566', address='California')
+    user3 = User(username = '2468', name = 'Tom Cruise', phone = '(123)456-7890', address = 'Hollywood')
+    user4 = User(username = '9876', name = 'Jackie Chan', phone = '(123)456-7890', address = 'Hollywood')
+    user5 = User(username = '8765', name = 'Bruce Lee', phone = '(123)456-7890', address = 'Hollywood')
+    user6 = User(username = '7654', name = 'Qingyang Li', phone = '(123)456-7890', address = 'Pittsburgh')
     user.set_password('1234')
     user1.set_password('5678')
     user2.set_password('1357')
+    user3.set_password('2468')
+    user4.set_password('9876')
+    user5.set_password('8765')
+    user6.set_password('7654')
+
     pet1 = Pet(name='Dobby', type=4, breed='Abyssinian', age=6, weight=7,
                activity_level=1, food_preference='raw meat', user=user)
     pet2 = Pet(name='Yoda', type=4, breed='Russian Blue', age=18, weight=10,
                activity_level=3, food_preference='raw meat', user=user)
+    pet3 = Pet(name='Panda', type=1, breed='Border Collie', age=4, weight=40,
+               activity_level=2, food_preference='bone', user=user)
+    pet4 = Pet(name='Pikachu', type=1, breed='Golden Retriever', age=2, weight=30,
+               activity_level=3, food_preference='bone', user=user)
+    pet5 = Pet(name='Puppy', type=2, breed='Poodle', age=1, weight=20,
+               activity_level=1, food_preference='chicken', user=user)
+    pet6 = Pet(name='Princess', type=3, breed='Chihuahua', age=3, weight=10,
+               activity_level=2, food_preference='dog food', user=user)
     
     today = datetime.today().strftime('%Y-%m-%d')
     today = datetime.strptime(today, '%Y-%m-%d')
@@ -113,16 +130,70 @@ def forge():
     weeks2 = [today+timedelta(days=i) for i in range(3, 6)]
     time_from_2 = datetime.strptime('10:00', '%H:%M')
     time_to_2 = datetime.strptime('15:00', '%H:%M')
+
+    weeks3 = [today+timedelta(days=i) for i in range(1, 8)]
+    time_from_3 = datetime.strptime('8:00', '%H:%M')
+    time_to_3 = datetime.strptime('21:00', '%H:%M')
+
+
+
     
     senior1 = Senior(age=50, fav_type=[1,2,4],
                      fav_activity=1, weekday=weeks1,time_from=time_from_1,time_to=time_to_1, user=user1)
     senior2 = Senior(age=66, fav_type=[4], fav_activity=3,weekday=weeks2,
                      time_from=time_from_2,time_to=time_to_2, user=user2)
+
+    senior3 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
+                     time_from=time_from_3,time_to=time_to_3, user=user3)
+    senior4 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
+                        time_from=time_from_3,time_to=time_to_3, user=user4)
+    senior5 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
+                        time_from=time_from_3,time_to=time_to_3, user=user5)
+    senior6 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
+                        time_from=time_from_3,time_to=time_to_3, user=user6)
+
+    schedule1 = Schedule(date=today-timedelta(days=1), dropOff=datetime.strptime('10:00', '%H:%M'),
+                         pickUp=datetime.strptime('12:00', '%H:%M'))
+    schedule2 = Schedule(date=today-timedelta(days=2), dropOff=datetime.strptime('13:00', '%H:%M'),
+                            pickUp=datetime.strptime('15:00', '%H:%M'))
     db.session.add(user)
+    db.session.add(user1)
+    db.session.add(user2)
+    db.session.add(user3)
+    db.session.add(user4)
+    db.session.add(user5)
+    db.session.add(user6)
+
     db.session.add(pet1)
     db.session.add(pet2)
+    db.session.add(pet3)
+    db.session.add(pet4)
+    db.session.add(pet5)
+    db.session.add(pet6)
+
     db.session.add(senior1)
     db.session.add(senior2)
+    db.session.add(senior3)
+    db.session.add(senior4)
+    db.session.add(senior5)
+    db.session.add(senior6)
+
+    temp1=User.query.get(1).id
+    temp2=User.query.get(1).pets[0].id
+    temp3=User.query.get(1).pets[1].id
+    temp4 =Senior.query.get(1).id
+    temp5 =Senior.query.get(2).id
+
+
+    schedule1.senior_id = temp4
+    schedule1.pet_id = temp2
+    schedule2.senior_id = temp5
+    schedule2.pet_id = temp3
+    schedule1.user_id = temp1
+    schedule2.user_id = temp1
+    db.session.add(schedule1)
+    db.session.add(schedule2)
+
     db.session.commit()
     click.echo('Done.')
 
@@ -373,10 +444,13 @@ def sessions():
     # sessions.sort(key=lambda x: (x[3],x[5]),reverse=True)
 
     sessions = Schedule.query.filter_by(user_id=current_user.id).all()
+    print(sessions)
     for session in sessions:
+        print(session.user_id)
         senior_user_id = Senior.query.get(session.senior_id).user_id
         session.senior = User.query.get(senior_user_id).name
         session.pet = Pet.query.get(session.pet_id).name
+    sessions.sort(key=lambda x: (x.date, x.pickUp), reverse=True)
     return render_template('/components/sessions.html',sessions = sessions,todayDate = datetime.today().date(),todayTime = datetime.today().time())
 
 @app.route('/sessionDelete/<int:sessionID>')

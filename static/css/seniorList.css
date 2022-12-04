@@ -34,9 +34,11 @@
     border-radius: 15px;
 }
 
-.active { background: rgba(140, 123, 96, 1); }
+.active {
+    background: rgba(140, 123, 96, 1);
+}
 
-.card > img {
+.card>img {
     border-radius: 15px;
     float: right;
     width: 80px;
@@ -97,8 +99,9 @@
     color: #000000;
 
 }
+
 input {
-    margin-top:1em;
+    margin-top: 1em;
     margin-left: 2em;
 }
 
@@ -137,5 +140,13 @@ p {
 }
 
 .ghost {
-    display:none;
+    display: none;
+}
+
+.cards {
+    height: 500px;
+    width: auto;
+    border-radius: 15px;
+    overflow-y: scroll;
+
 }
