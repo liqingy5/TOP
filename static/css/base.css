@@ -11,7 +11,7 @@ html {
 
 }
 
-.alert {
+.success {
     position: relative;
     padding: 7px;
     margin: 7px 0;
@@ -20,4 +20,19 @@ html {
     background-color: #cce5ff;
     border-color: #b8daff;
     border-radius: 5px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.error {
+    position: relative;
+    padding: 7px;
+    margin: 7px 0;
+    border: 1px solid transparent;
+    color: white;
+    background-color: #ff3333;
+    border-color: #ff3333;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: 700;
 }

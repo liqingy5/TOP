@@ -144,15 +144,15 @@ def login():
         password = request.form['password']
 
         if not username or not password:
-            flash('Invalid input.')
+            flash('Invalid input.','error')
             return redirect(url_for('login'))
 
         user = User.query.filter_by(username=username).first()
         if user and username == user.username and user.validate_password(password):
             login_user(user)
-            flash('Login success.')
+            flash('Login success.','success')
             return redirect(url_for('index'))
-        flash('Invalid username or password.')
+        flash('Invalid username or password.','error')
         return redirect(url_for('login'))
     return render_template('/components/login.html')
 
@@ -161,7 +161,7 @@ def login():
 @login_required  # 用于视图保护
 def logout():
     logout_user()  # 登出用户
-    flash('Goodbye.')
+    flash('Goodbye.','success')
     return redirect(url_for('login'))  # 重定向回首页
 
 def generate_senior_list(seniors, pet, droptime, picktime):
@@ -306,26 +306,26 @@ def schedule():
 
         print(datetime.strptime('12:00', '%H:%M'))
         if(pet_id==-1):
-            flash("You don't have any pet!")
+            flash("You don't have any pet!",'error')
             return redirect(url_for('schedule'))
         
         if date == '' or droptime == '' or picktime == '':
-            flash('Invalid date or time.')
+            flash('Invalid date or time.','error')
             return redirect('schedule')
 
         if picktime <= droptime:
-            flash('Pick-up time cannot be earlier than drop-off time')
+            flash('Pick-up time cannot be earlier than drop-off time','error')
             return redirect('schedule')
 
         droptime = datetime.strptime(date + " " + droptime, "%Y-%m-%d %H:%M")
         picktime = datetime.strptime(date + " " + picktime, "%Y-%m-%d %H:%M")
 
         if droptime < datetime.now():
-            flash('Drop-off time has to be in the future')
+            flash('Drop-off time has to be in the future','error')
             return redirect('schedule')
 
         if picktime < datetime.now():
-            flash('Pick-up time has to be in the future')
+            flash('Pick-up time has to be in the future','error')
             return redirect('schedule')
 
         if request.form['submitBtn'] == "The most suitable senior citizen":
@@ -354,13 +354,13 @@ def myInfo():
         phone = request.form['phone']
         address = request.form['address']
         if not name or not phone or not address:
-            flash('Invalid input.')
+            flash('Invalid input.','error')
             return redirect(url_for('myInfo'))
         user.name = name
         user.phone = phone
         user.address = address
         db.session.commit()
-        flash('Update success.')
+        flash('Update success.','success')
     return render_template('/components/info.html', user=user)
 
 
@@ -385,7 +385,7 @@ def sessionDelete(sessionID):
     session = Schedule.query.get(sessionID)
     db.session.delete(session)
     db.session.commit()
-    flash('Delete success.')
+    flash('Delete success.','success')
     return redirect(url_for('sessions'))
 
 
@@ -416,7 +416,7 @@ def seniorPref():
         time_to = request.form['to']
         time_to = datetime.strptime(time_to, '%H:%M')
         if not age or not fav_type or not fav_activity or not weekday or not time_from or not time_to:
-            flash('Invalid input.')
+            flash('Invalid input.','error')
             return redirect(url_for('seniorPref'))
         
         if not senior:
@@ -432,7 +432,7 @@ def seniorPref():
 
         db.session.add(senior)
         db.session.commit()
-        flash('Preference Update success.')
+        flash('Preference Update success.','success')
         seniorAvaliability = [x.date() for x in senior.weekday]
         seniorTimeFrom = senior.time_from.strftime('%H:%M')
         seniorTimeTo = senior.time_to.strftime('%H:%M')
@@ -445,7 +445,7 @@ def deletePet(pet_id):
     pet = Pet.query.get(pet_id)
     db.session.delete(pet)
     db.session.commit()
-    flash('Delete success.')
+    flash('Delete success.','success')
     return redirect(url_for('petsList'))
 
 
@@ -461,13 +461,13 @@ def newPet():
         activity_level = request.form['petActivity']
         food_preference = request.form['petFoodPreference']
         if not name or not type or not breed or not age or not weight or not activity_level or not food_preference:
-            flash('Invalid input.')
+            flash('Invalid input.','error')
             return redirect(url_for('newPet'))
         pet = Pet(name=name, type=type, breed=breed, age=age, weight=weight,
                   activity_level=activity_level, food_preference=food_preference, user=current_user)
         db.session.add(pet)
         db.session.commit()
-        flash('Add success.')
+        flash('Add success.','success')
         return redirect(url_for('petsList'))
     return render_template('/components/pet.html', owner=current_user.name)
 
@@ -486,7 +486,7 @@ def pet(pet_id):
         activity_level = request.form['petActivity']
         food_preference = request.form['petFoodPreference']
         if not name or not type or not breed or not age or not weight or not activity_level or not food_preference:
-            flash('Invalid input.')
+            flash('Invalid input.','error')
             return redirect(url_for('pet', pet_id=pet_id))
 
         pet.name = name
@@ -497,7 +497,7 @@ def pet(pet_id):
         pet.activity_level = activity_level
         pet.food_preference = food_preference
         db.session.commit()
-        flash('Pet info Updated.')
+        flash('Pet info Updated.','success')
         return redirect(url_for('petsList'))
     return render_template('/components/pet.html', pet=pet, owner=current_user.name)
 
