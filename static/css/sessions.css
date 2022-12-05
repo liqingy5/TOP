@@ -1,8 +1,9 @@
 .sessions {
     float: left;
+    text-align: center;
     margin: auto;
     padding: 0;
-    margin-left: 25em;
+    margin-left: 15em;
     margin-top: 5em;
 }
 
@@ -19,7 +20,7 @@
 }
 
 .sessionsForm {
-    width: auto;
+    width: 760px;
     left: 466px;
     top: 230px;
 
