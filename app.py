@@ -26,6 +26,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = prefix + \
     os.path.join(app.root_path, 'data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'dev'
+app.run(debug=False)
+
 
 db = SQLAlchemy(app)
 
@@ -67,7 +69,7 @@ class Senior(db.Model):
     age = db.Column(db.Integer)
     fav_type = db.Column(db.PickleType)
     fav_activity = db.Column(db.Integer)
-    weekday=db.Column(db.PickleType)
+    weekday = db.Column(db.PickleType)
     time_from = db.Column(db.DateTime)
     time_to = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -97,10 +99,14 @@ def forge():
                  phone='(123)456-7899', address='Twitter HQ')
     user2 = User(username='1357', name='Brad Pitt',
                  phone='(789)123-4566', address='California')
-    user3 = User(username = '2468', name = 'Tom Cruise', phone = '(123)456-7890', address = 'Hollywood')
-    user4 = User(username = '9876', name = 'Jackie Chan', phone = '(123)456-7890', address = 'Hollywood')
-    user5 = User(username = '8765', name = 'Bruce Lee', phone = '(123)456-7890', address = 'Hollywood')
-    user6 = User(username = '7654', name = 'Qingyang Li', phone = '(123)456-7890', address = 'Pittsburgh')
+    user3 = User(username='2468', name='Tom Cruise',
+                 phone='(123)456-7890', address='Hollywood')
+    user4 = User(username='9876', name='Jackie Chan',
+                 phone='(123)456-7890', address='Hollywood')
+    user5 = User(username='8765', name='Bruce Lee',
+                 phone='(123)456-7890', address='Hollywood')
+    user6 = User(username='7654', name='Qingyang Li',
+                 phone='(123)456-7890', address='Pittsburgh')
     user.set_password('1234')
     user1.set_password('5678')
     user2.set_password('1357')
@@ -121,7 +127,7 @@ def forge():
                activity_level=1, food_preference='chicken', user=user)
     pet6 = Pet(name='Princess', type=3, breed='Chihuahua', age=3, weight=10,
                activity_level=2, food_preference='dog food', user=user)
-    
+
     today = datetime.today().strftime('%Y-%m-%d')
     today = datetime.strptime(today, '%Y-%m-%d')
     weeks1 = [today+timedelta(days=i) for i in range(5, 8)]
@@ -135,27 +141,24 @@ def forge():
     time_from_3 = datetime.strptime('8:00', '%H:%M')
     time_to_3 = datetime.strptime('21:00', '%H:%M')
 
+    senior1 = Senior(age=50, fav_type=[1, 2, 4],
+                     fav_activity=1, weekday=weeks1, time_from=time_from_1, time_to=time_to_1, user=user1)
+    senior2 = Senior(age=66, fav_type=[4], fav_activity=3, weekday=weeks2,
+                     time_from=time_from_2, time_to=time_to_2, user=user2)
 
-
-    
-    senior1 = Senior(age=50, fav_type=[1,2,4],
-                     fav_activity=1, weekday=weeks1,time_from=time_from_1,time_to=time_to_1, user=user1)
-    senior2 = Senior(age=66, fav_type=[4], fav_activity=3,weekday=weeks2,
-                     time_from=time_from_2,time_to=time_to_2, user=user2)
-
-    senior3 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
-                     time_from=time_from_3,time_to=time_to_3, user=user3)
-    senior4 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
-                        time_from=time_from_3,time_to=time_to_3, user=user4)
-    senior5 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
-                        time_from=time_from_3,time_to=time_to_3, user=user5)
-    senior6 = Senior(age=66, fav_type=[1,2,3,4], fav_activity=3,weekday=weeks3,
-                        time_from=time_from_3,time_to=time_to_3, user=user6)
+    senior3 = Senior(age=66, fav_type=[1, 2, 3, 4], fav_activity=3, weekday=weeks3,
+                     time_from=time_from_3, time_to=time_to_3, user=user3)
+    senior4 = Senior(age=66, fav_type=[1, 2, 3, 4], fav_activity=3, weekday=weeks3,
+                     time_from=time_from_3, time_to=time_to_3, user=user4)
+    senior5 = Senior(age=66, fav_type=[1, 2, 3, 4], fav_activity=3, weekday=weeks3,
+                     time_from=time_from_3, time_to=time_to_3, user=user5)
+    senior6 = Senior(age=66, fav_type=[1, 2, 3, 4], fav_activity=3, weekday=weeks3,
+                     time_from=time_from_3, time_to=time_to_3, user=user6)
 
     schedule1 = Schedule(date=today-timedelta(days=1), dropOff=datetime.strptime('10:00', '%H:%M'),
                          pickUp=datetime.strptime('12:00', '%H:%M'))
     schedule2 = Schedule(date=today-timedelta(days=2), dropOff=datetime.strptime('13:00', '%H:%M'),
-                            pickUp=datetime.strptime('15:00', '%H:%M'))
+                         pickUp=datetime.strptime('15:00', '%H:%M'))
     db.session.add(user)
     db.session.add(user1)
     db.session.add(user2)
@@ -178,12 +181,11 @@ def forge():
     db.session.add(senior5)
     db.session.add(senior6)
 
-    temp1=User.query.get(1).id
-    temp2=User.query.get(1).pets[0].id
-    temp3=User.query.get(1).pets[1].id
-    temp4 =Senior.query.get(1).id
-    temp5 =Senior.query.get(2).id
-
+    temp1 = User.query.get(1).id
+    temp2 = User.query.get(1).pets[0].id
+    temp3 = User.query.get(1).pets[1].id
+    temp4 = Senior.query.get(1).id
+    temp5 = Senior.query.get(2).id
 
     schedule1.senior_id = temp4
     schedule1.pet_id = temp2
@@ -215,15 +217,15 @@ def login():
         password = request.form['password']
 
         if not username or not password:
-            flash('Invalid input.','error')
+            flash('Invalid input.', 'error')
             return redirect(url_for('login'))
 
         user = User.query.filter_by(username=username).first()
         if user and username == user.username and user.validate_password(password):
             login_user(user)
-            flash('Login success.','success')
+            flash('Login success.', 'success')
             return redirect(url_for('index'))
-        flash('Invalid username or password.','error')
+        flash('Invalid username or password.', 'error')
         return redirect(url_for('login'))
     return render_template('/components/login.html')
 
@@ -232,8 +234,9 @@ def login():
 @login_required  # 用于视图保护
 def logout():
     logout_user()  # 登出用户
-    flash('Goodbye.','success')
+    flash('Goodbye.', 'success')
     return redirect(url_for('login'))  # 重定向回首页
+
 
 def generate_senior_list(seniors, pet, droptime, picktime):
     ret = []
@@ -257,12 +260,13 @@ def generate_senior_list(seniors, pet, droptime, picktime):
 
         time_from = senior.time_from.strftime("%H:%M:%S")
         time_to = senior.time_to.strftime("%H:%M:%S")
-        if droptime<time_from or picktime>time_to:
+        if droptime < time_from or picktime > time_to:
             continue
 
         ret.append(senior)
 
     return ret
+
 
 def get_all_users(seniors):
     ret = []
@@ -270,6 +274,7 @@ def get_all_users(seniors):
         ret.append(User.query.get(senior.user_id))
 
     return ret
+
 
 @app.route('/AI_schedule')
 def AI_schedule():
@@ -280,9 +285,10 @@ def AI_schedule():
     seniors = Senior.query.all()
     seniors_aval = generate_senior_list(seniors, pet, droptime, picktime)
     users = get_all_users(seniors_aval)
-    if len(seniors_aval)>=1:
+    if len(seniors_aval) >= 1:
         seniors_aval = seniors_aval[0:1]
         users = users[0:1]
+    print(users)
     return render_template('/components/AI_schedule.html',
                            seniors=seniors_aval,
                            users=users,
@@ -290,6 +296,7 @@ def AI_schedule():
                            droptime=droptime,
                            picktime=picktime,
                            )
+
 
 @app.route('/hybrid_schedule')
 def hybrid_schedule():
@@ -300,9 +307,10 @@ def hybrid_schedule():
     seniors = Senior.query.all()
     seniors_aval = generate_senior_list(seniors, pet, droptime, picktime)
     users = get_all_users(seniors_aval)
-    if len(seniors_aval)>=5:
+    if len(seniors_aval) >= 5:
         seniors_aval = seniors_aval[0:5]
         users = users[0:5]
+    print(users)
     return render_template('/components/hybrid_schedule.html',
                            seniors=seniors_aval,
                            users=users,
@@ -321,6 +329,7 @@ def manual_schedule():
     seniors = Senior.query.all()
     seniors_aval = generate_senior_list(seniors, pet, droptime, picktime)
     users = get_all_users(seniors_aval)
+    print(users)
     return render_template('/components/manual_schedule.html',
                            seniors=seniors_aval,
                            users=users,
@@ -333,7 +342,8 @@ def manual_schedule():
 @app.route('/confirm', methods=['POST'])
 def confirm():
     date = datetime.strptime(request.form['droptime'].split()[0], "%Y-%m-%d")
-    dropOff = datetime.strptime(request.form['droptime'].split()[1], "%H:%M:%S")
+    dropOff = datetime.strptime(
+        request.form['droptime'].split()[1], "%H:%M:%S")
     pickUp = datetime.strptime(request.form['picktime'].split()[1], "%H:%M:%S")
     pet_id = request.form['pet_id']
     senior_id = request.form['senior_id']
@@ -364,7 +374,7 @@ def home():
 @login_required
 def schedule():
     today = datetime.today().date()
-    choosebleDate = [today + timedelta(days=i) for i in range(1,8)]
+    choosebleDate = [today + timedelta(days=i) for i in range(1, 8)]
     if request.method == 'POST':
         pet_id = int(request.form['pet'])
         date = request.form['weekdaysSelect']
@@ -376,33 +386,33 @@ def schedule():
         # print(request.form['submitBtn'])
 
         # print(datetime.strptime('12:00', '%H:%M'))
-        if(pet_id==-1):
-            flash("You don't have any pet!",'error')
+        if(pet_id == -1):
+            flash("You don't have any pet!", 'error')
             return redirect(url_for('schedule'))
-        
+
         if date == '' or droptime == '' or picktime == '':
-            flash('Invalid date or time.','error')
+            flash('Invalid date or time.', 'error')
             return redirect('schedule')
 
         if picktime <= droptime:
-            flash('Pick-up time cannot be earlier than drop-off time','error')
+            flash('Pick-up time cannot be earlier than drop-off time', 'error')
             return redirect('schedule')
 
         droptime = datetime.strptime(date + " " + droptime, "%Y-%m-%d %H:%M")
         picktime = datetime.strptime(date + " " + picktime, "%Y-%m-%d %H:%M")
 
         if droptime < datetime.now():
-            flash('Drop-off time has to be in the future','error')
+            flash('Drop-off time has to be in the future', 'error')
             return redirect('schedule')
 
         if picktime < datetime.now():
-            flash('Pick-up time has to be in the future','error')
+            flash('Pick-up time has to be in the future', 'error')
             return redirect('schedule')
 
         if request.form['submitBtn'] == "The most suitable senior citizen":
             print("Pet owner chooses to match the most suitable senior")
             return redirect(url_for('AI_schedule', pet_id=pet_id, droptime=droptime, picktime=picktime))
-        elif request.form['submitBtn'] == "I'll choose from the top-5 subitable senior citizens":
+        elif request.form['submitBtn'] == "I'll choose from the top-5 suitable senior citizens":
             print("Pet owner chooses to select from the top 5 seniors")
             return redirect(url_for('hybrid_schedule', pet_id=pet_id, droptime=droptime, picktime=picktime))
         else:
@@ -412,8 +422,7 @@ def schedule():
         # cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s, % s)', (name, date, time, pet))
         # mysql.connection.commit()
     pets = User.query.get(current_user.id).pets
-    return render_template('/components/schedule.html', pets=pets,choosebleDate = choosebleDate)
-
+    return render_template('/components/schedule.html', pets=pets, choosebleDate=choosebleDate)
 
 
 @app.route('/myInfo', methods=['GET', 'POST'])
@@ -425,13 +434,13 @@ def myInfo():
         phone = request.form['phone']
         address = request.form['address']
         if not name or not phone or not address:
-            flash('Invalid input.','error')
+            flash('Invalid input.', 'error')
             return redirect(url_for('myInfo'))
         user.name = name
         user.phone = phone
         user.address = address
         db.session.commit()
-        flash('Update success.','success')
+        flash('Update success.', 'success')
     return render_template('/components/info.html', user=user)
 
 
@@ -451,7 +460,8 @@ def sessions():
         session.senior = User.query.get(senior_user_id).name
         session.pet = Pet.query.get(session.pet_id).name
     sessions.sort(key=lambda x: (x.date, x.pickUp), reverse=True)
-    return render_template('/components/sessions.html',sessions = sessions,todayDate = datetime.today().date(),todayTime = datetime.today().time())
+    return render_template('/components/sessions.html', sessions=sessions, todayDate=datetime.today().date(), todayTime=datetime.today().time())
+
 
 @app.route('/sessionDelete/<int:sessionID>')
 @login_required
@@ -459,9 +469,8 @@ def sessionDelete(sessionID):
     session = Schedule.query.get(sessionID)
     db.session.delete(session)
     db.session.commit()
-    flash('Delete success.','success')
+    flash('Delete success.', 'success')
     return redirect(url_for('sessions'))
-
 
 
 @app.route('/seniorPref', methods=['GET', 'POST'])
@@ -469,8 +478,8 @@ def sessionDelete(sessionID):
 def seniorPref():
     senior = User.query.get(current_user.id).senior
     today = datetime.today().date()
-    choosebleDate = [today + timedelta(days=i) for i in range(1,8)]
-    seniorAvaliability=[]
+    choosebleDate = [today + timedelta(days=i) for i in range(1, 8)]
+    seniorAvaliability = []
     seniorTimeFrom = None
     seniorTimeTo = None
     if senior:
@@ -484,15 +493,15 @@ def seniorPref():
         fav_type = [eval(i) for i in fav_type]
         fav_activity = request.form['petActivity']
         weekday = request.form.getlist('weekdaysSelect')
-        weekday = [datetime.strptime(i,'%Y-%m-%d') for i in weekday]
+        weekday = [datetime.strptime(i, '%Y-%m-%d') for i in weekday]
         time_from = request.form['from']
         time_from = datetime.strptime(time_from, '%H:%M')
         time_to = request.form['to']
         time_to = datetime.strptime(time_to, '%H:%M')
         if not age or not fav_type or not fav_activity or not weekday or not time_from or not time_to:
-            flash('Invalid input.','error')
+            flash('Invalid input.', 'error')
             return redirect(url_for('seniorPref'))
-        
+
         if not senior:
             senior = Senior()
             senior.user_id = current_user.id
@@ -506,11 +515,11 @@ def seniorPref():
 
         db.session.add(senior)
         db.session.commit()
-        flash('Preference Update success.','success')
+        flash('Preference Update success.', 'success')
         seniorAvaliability = [x.date() for x in senior.weekday]
         seniorTimeFrom = senior.time_from.strftime('%H:%M')
         seniorTimeTo = senior.time_to.strftime('%H:%M')
-    return render_template('/components/seniorPrefer.html', senior=senior,choosebleDate = choosebleDate,seniorAvaliability = seniorAvaliability,time_from=seniorTimeFrom,time_to=seniorTimeTo)
+    return render_template('/components/seniorPrefer.html', senior=senior, choosebleDate=choosebleDate, seniorAvaliability=seniorAvaliability, time_from=seniorTimeFrom, time_to=seniorTimeTo)
 
 
 @app.route('/petsList/delete/<int:pet_id>', methods=['GET', 'POST'])
@@ -519,7 +528,7 @@ def deletePet(pet_id):
     pet = Pet.query.get(pet_id)
     db.session.delete(pet)
     db.session.commit()
-    flash('Delete success.','success')
+    flash('Delete success.', 'success')
     return redirect(url_for('petsList'))
 
 
@@ -535,13 +544,13 @@ def newPet():
         activity_level = request.form['petActivity']
         food_preference = request.form['petFoodPreference']
         if not name or not type or not breed or not age or not weight or not activity_level or not food_preference:
-            flash('Invalid input.','error')
+            flash('Invalid input.', 'error')
             return redirect(url_for('newPet'))
         pet = Pet(name=name, type=type, breed=breed, age=age, weight=weight,
                   activity_level=activity_level, food_preference=food_preference, user=current_user)
         db.session.add(pet)
         db.session.commit()
-        flash('Add success.','success')
+        flash('Add success.', 'success')
         return redirect(url_for('petsList'))
     return render_template('/components/pet.html', owner=current_user.name)
 
@@ -560,7 +569,7 @@ def pet(pet_id):
         activity_level = request.form['petActivity']
         food_preference = request.form['petFoodPreference']
         if not name or not type or not breed or not age or not weight or not activity_level or not food_preference:
-            flash('Invalid input.','error')
+            flash('Invalid input.', 'error')
             return redirect(url_for('pet', pet_id=pet_id))
 
         pet.name = name
@@ -571,7 +580,7 @@ def pet(pet_id):
         pet.activity_level = activity_level
         pet.food_preference = food_preference
         db.session.commit()
-        flash('Pet info Updated.','success')
+        flash('Pet info Updated.', 'success')
         return redirect(url_for('petsList'))
     return render_template('/components/pet.html', pet=pet, owner=current_user.name)
 
@@ -589,4 +598,3 @@ def petsList():
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)
-
